@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
 import icon from '../../assets/icon.svg';
 import './App.css';
+import { TestComponent } from './components/TestComponent';
+import 'antd/dist/antd.css';
 
 const Hello = () => {
   const [x, setX] = useState(0);
@@ -30,6 +32,8 @@ const Hello = () => {
           {x}
         </button>
       </div>
+
+      <TestComponent />
     </div>
   );
 };
