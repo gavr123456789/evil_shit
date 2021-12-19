@@ -2,9 +2,15 @@
  * Base webpack config used across other specific configs
  */
 
-import webpack from 'webpack';
+import {webpack, IgnorePlugin} from 'webpack';
 import webpackPaths from './webpack.paths';
 import { dependencies as externals } from '../../release/app/package.json';
+
+
+const optionalPlugins = [];
+if (process.platform !== "darwin") {
+  optionalPlugins.push(new IgnorePlugin({ resourceRegExp: /^fsevents$/ }));
+}
 
 export default {
   externals: [...Object.keys(externals || {})],
@@ -41,11 +47,15 @@ export default {
   resolve: {
     extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
     modules: [webpackPaths.srcPath, 'node_modules'],
+    fallback: {
+      util: require.resolve("util/"),
+    }
   },
 
   plugins: [
-    new webpack.EnvironmentPlugin({
-      NODE_ENV: 'production',
-    }),
+    // new webpack.EnvironmentPlugin({
+    //   NODE_ENV: 'production',
+    // }),
+    ...optionalPlugins,
   ],
 };
