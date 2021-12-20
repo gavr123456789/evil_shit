@@ -1,5 +1,9 @@
 // const chokidar = require("chokidar");
 import { FSWatcher, watch } from "chokidar";
+
+
+
+
 export function startWatch(path: string) {
   const watcher = watch(path, {
     ignored: /[\/\\]\./,

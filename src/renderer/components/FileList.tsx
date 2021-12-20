@@ -1,5 +1,5 @@
 import { Skeleton, Divider, List, Avatar } from "antd";
-import { useState, useEffect } from "react";
+import { useState, useEffect, FC } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { startWatch } from "services/FileService";
 import { createNewId } from "services/utils";
@@ -36,7 +36,33 @@ const dataMock: FileItem[] = [
   },
 ];
 
-export const FileList = () => {
+interface ListItemProps {
+  item: FileItem;
+}
+
+const ListItem: FC<ListItemProps> = ({ item }) => {
+  return (
+    <List.Item
+      key={item.id}
+      onClick={() => {
+        startWatch("/home/gavr/test");
+      }}
+    >
+      <List.Item.Meta
+        // avatar={<Avatar src={item.picture.large} />}
+        title={<a>{item.name}</a>}
+        description={item.id}
+      />
+      <div>Content</div>
+    </List.Item>
+  );
+};
+
+interface FileListProps {
+  path: string
+}
+
+export const FileList: FC<FileListProps> = ({path}) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<FileItem[]>(dataMock);
 
@@ -82,30 +108,12 @@ export const FileList = () => {
         next={loadMoreData}
         hasMore={data.length < dataMock.length}
         loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-        endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+        endMessage={<Divider plain>nothing more</Divider>}
         scrollableTarget="scrollableDiv"
       >
         <List
           dataSource={data}
-          renderItem={(item) => {
-            return (
-              <List.Item
-                key={item.id}
-                onClick={() => {
-                  console.log("sasssssssssss");
-                  
-                  startWatch("/home/gavr/test");
-                }}
-              >
-                <List.Item.Meta
-                  // avatar={<Avatar src={item.picture.large} />}
-                  title={<a href="https://ant.design">{item.name}</a>}
-                  description={item.id}
-                />
-                <div>Content</div>
-              </List.Item>
-            );
-          }}
+          renderItem={(item) => <ListItem item={item} />}
         />
       </InfiniteScroll>
     </div>
