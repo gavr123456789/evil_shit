@@ -1,12 +1,16 @@
 // const chokidar = require("chokidar");
-import { FSWatcher, watch } from "chokidar";
+import { watch } from "chokidar";
 import { createEvent, createStore } from "effector-logger";
+import { stat, Stats } from "fs";
+import { basename } from "path";
+import { FileItem } from "renderer/components/FileOnPage";
+// const fs = require('fs')
 
-export const $filePaths = createStore<string[]>([], {name: "filePaths"})
-export const $dirsPaths = createStore<string[]>([], {name: "dirsPaths"})
+export const $filePaths = createStore<FileItem[]>([], {name: "filePaths"})
+export const $dirsPaths = createStore<FileItem[]>([], {name: "dirsPaths"})
 
-const fileAdded = createEvent<string>("fileAdded")
-const dirAdded = createEvent<string>("dirAdded")
+const fileAdded = createEvent<FileItem>("fileAdded")
+const dirAdded = createEvent<FileItem>("dirAdded")
 
 
 $filePaths.on(fileAdded, (oldVal, newVal) => [...oldVal, newVal])
@@ -27,11 +31,24 @@ export function startWatch(path: string) {
   watcher
     .on("add", function (path) {
       console.log("File", path, "has been added");
-      fileAdded(path)
+      stat(path, (err, stats) => {
+        if (err) {
+          console.error(err)
+          return
+        }
+        fileAdded({item: stats, name: basename(path), path: path})
+      })
     })
     .on("addDir", function (path) {
       console.log("Directory", path, "has been added");
-      dirAdded(path)
+      stat(path, (err, stats) => {
+        if (err) {
+          console.error(err)
+          return
+        }
+        dirAdded({item: stats, name: basename(path), path: path})
+      })
+      
     })
     .on("change", function (path) {
       console.log("File", path, "has been changed");

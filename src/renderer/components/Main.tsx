@@ -4,7 +4,7 @@ import { useStore } from "effector-react/effector-react.cjs";
 import { FC, useState } from "react";
 import { EffectorTest } from "./EffectorTest/EffectorTest";
 
-import { FileList } from "./FileList";
+import { FilePage } from "./FilePage";
 
 
 export const MainComponent: FC = () => {
@@ -12,7 +12,7 @@ export const MainComponent: FC = () => {
 
   return (
     <Space style={{margin: 6}}>
-      <FileList />
+      <FilePage />
       <EffectorTest />
  
     </Space>
