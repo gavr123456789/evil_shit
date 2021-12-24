@@ -3,7 +3,7 @@ import { FSWatcher } from "chokidar";
 import { useStore } from "effector-react";
 import { useState, useEffect, FC } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { $dirsPaths, $filePaths, startWatch } from "services/FileService";
+import { $dirsPaths, $filePaths, $filesAndDirsPaths, startWatch } from "services/FileService";
 import { createNewId } from "services/utils";
 import { ListItem } from "./FileOnPage";
 
@@ -14,8 +14,7 @@ interface FileListProps {
 
 export const FilePage: FC<FileListProps> = ({path}) => {
   console.log("sasssss");
-  const files = useStore($filePaths)
-  const dirs = useStore($dirsPaths)
+  const files = useStore($filesAndDirsPaths)
   
   const [watcher, setWatcher] = useState<FSWatcher | null>(null)
   const loadMoreData = () => {
@@ -61,3 +60,5 @@ export const FilePage: FC<FileListProps> = ({path}) => {
     </div>
   );
 };
+
+

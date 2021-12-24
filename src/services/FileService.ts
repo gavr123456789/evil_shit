@@ -1,6 +1,6 @@
 // const chokidar = require("chokidar");
 import { FSWatcher, watch } from "chokidar";
-import { createEvent, createStore } from "effector-logger";
+import { combine, createEvent, createStore } from "effector-logger";
 import { stat } from "fs";
 import { basename } from "path";
 import { FileItem } from "renderer/components/FileOnPage";
@@ -28,7 +28,10 @@ $dirsPaths.on(dirAdded, (oldVal, newVal) => naturalSort([...oldVal, newVal]).asc
 
 // Соединить сторы в один с сортировкой сначала директорий
 
-
+export const $filesAndDirsPaths = combine(
+  [ $dirsPaths, $filePaths],
+  (items) => [...items[0], ...items[1]]
+)
 
 export function startWatch(path: string): FSWatcher {
   const watcher = watch(path, {
