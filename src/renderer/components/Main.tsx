@@ -12,7 +12,7 @@ export const MainComponent: FC = () => {
 
   return (
     <Space style={{margin: 6}}>
-      <FilePage />
+      <FilePage path="/home/gavr/test" />
       <EffectorTest />
  
     </Space>

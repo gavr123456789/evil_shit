@@ -1,22 +1,36 @@
 // const chokidar = require("chokidar");
-import { watch } from "chokidar";
+import { FSWatcher, watch } from "chokidar";
 import { createEvent, createStore } from "effector-logger";
-import { stat, Stats } from "fs";
+import { stat } from "fs";
 import { basename } from "path";
 import { FileItem } from "renderer/components/FileOnPage";
-// const fs = require('fs')
 
+import { sort, createNewSortInstance } from 'fast-sort';
+
+// const testArr = ['image-2.jpg', 'image-11.jpg', 'image-3.jpg'];
+
+const naturalSort = createNewSortInstance({
+  comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' }).compare,
+});
+
+// naturalSort(testArr).asc(); // => ['image-2.jpg', 'image-3.jpg', 'image-11.jpg']
+// naturalSort(testArr).desc(); // => ['image-11.jpg', 'image-3.jpg', 'image-2.jpg']
+
+///
 export const $filePaths = createStore<FileItem[]>([], {name: "filePaths"})
 export const $dirsPaths = createStore<FileItem[]>([], {name: "dirsPaths"})
 
 const fileAdded = createEvent<FileItem>("fileAdded")
 const dirAdded = createEvent<FileItem>("dirAdded")
 
+$filePaths.on(fileAdded, (oldVal, newVal) => naturalSort([...oldVal, newVal]).asc())
+$dirsPaths.on(dirAdded, (oldVal, newVal) => naturalSort([...oldVal, newVal]).asc())
 
-$filePaths.on(fileAdded, (oldVal, newVal) => [...oldVal, newVal])
-$dirsPaths.on(dirAdded, (oldVal, newVal) => [...oldVal, newVal])
+// Соединить сторы в один с сортировкой сначала директорий
 
-export function startWatch(path: string) {
+
+
+export function startWatch(path: string): FSWatcher {
   const watcher = watch(path, {
     ignored: /[\/\\]\./,
     persistent: true,
@@ -24,7 +38,7 @@ export function startWatch(path: string) {
   });
   function onWatcherReady() {
     console.info(
-      "SASASASSAASAS WATCHER READY."
+      "SASASASSAASAS WATCHER READY, watching path: ", path
     );
   }
 
@@ -67,12 +81,6 @@ export function startWatch(path: string) {
       // This event should be triggered everytime something happens.
       console.log("Raw event info:", event, path, details);
     });
+
+    return watcher
 }
-
-
-// var watch = require('node-watch');
-
-// watch('home/gavr/test', { recursive: true }, function(evt: any, name: any) {
-//   console.log('%s changed.', name);
-// });
-

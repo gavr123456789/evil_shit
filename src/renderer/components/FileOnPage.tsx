@@ -17,7 +17,7 @@ export const ListItem: FC<FileItem> = ({ item, name, path }) => {
       key={item.uid}
       onClick={() => {
         console.log("clicked ", item);
-        
+        // add new list
       }}
     >
       <List.Item.Meta
@@ -25,7 +25,6 @@ export const ListItem: FC<FileItem> = ({ item, name, path }) => {
         title={<a>{name}</a>}
         description={path}
       />
-      <div>Content</div>
     </List.Item>
   );
 };
