@@ -1,22 +1,25 @@
 import { Skeleton, Divider, List } from "antd";
 import { FSWatcher } from "chokidar";
-import { useStore } from "effector-react";
+
 import { useState, useEffect, FC } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { $dirsPaths, $filePaths, $filesAndDirsPaths, startWatch } from "services/FileService";
+import { startWatch } from "services/FileService";
 import { createNewId } from "services/utils";
-import { ListItem } from "./FileOnPage";
+import { DirRow, FileRow } from "./FileRow";
 
+import { Page } from "./pagesStore";
 
 interface FileListProps {
-  path: string
+  page: Page;
 }
 
-export const FilePage: FC<FileListProps> = ({path}) => {
-  console.log("sasssss");
-  const files = useStore($filesAndDirsPaths)
+export const FilePage: FC<FileListProps> = ({ page }) => {
+  console.log("__FilePage, page = ", page);
   
-  const [watcher, setWatcher] = useState<FSWatcher | null>(null)
+  // const files = useStore($filesAndDirsPaths)
+  // const pages = useStore($pages3)
+
+  const [watcher, setWatcher] = useState<FSWatcher | null>(null);
   const loadMoreData = () => {
     // if (loading) {
     //   return;
@@ -25,12 +28,11 @@ export const FilePage: FC<FileListProps> = ({path}) => {
   };
 
   useEffect(() => {
-    setWatcher(startWatch(path))
-    return function cleanup() {  
-      watcher?.close().then(() => console.log('watcher closed'));
+    setWatcher(startWatch(page.path));
+    return function cleanup() {
+      watcher?.close().then(() => console.log("watcher closed"));
     };
-  }, [path]);
-
+  }, [page.path]);
 
   return (
     <div
@@ -44,7 +46,7 @@ export const FilePage: FC<FileListProps> = ({path}) => {
       }}
     >
       <InfiniteScroll
-        dataLength={files.length}
+        dataLength={page.dirsAndFiles.length}
         next={loadMoreData}
         hasMore={false}
         loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
@@ -52,13 +54,17 @@ export const FilePage: FC<FileListProps> = ({path}) => {
         scrollableTarget="scrollableDiv"
       >
         <List
-          dataSource={files}
-          renderItem={(x) => <ListItem path={x.path} name={x.name} item={x.item} />}
+          dataSource={page.dirsAndFiles}
+          renderItem={(x) =>
+            x.kind === "file" 
+            ? 
+              <FileRow key={createNewId()} path={page.path} item={x} /> 
+            :
+              <DirRow key={createNewId()} path={page.path} item={x} /> 
+          }
           size="large"
         />
       </InfiniteScroll>
     </div>
   );
 };
-
-
