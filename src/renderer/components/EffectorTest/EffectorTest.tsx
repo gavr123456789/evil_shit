@@ -1,8 +1,7 @@
 import { Button, Space } from 'antd'
-import {createStore, createEvent, createEffect} from 'effector-logger'
+import {createStore, createEvent, createEffect} from 'effector'
 import { useStore } from 'effector-react'
 import { FC } from 'react'
-import 'effector-logger/inspector';
 
 // const login = createStore('guest')
 
@@ -53,8 +52,6 @@ $flagStore
 
 $counderStore
   .on(counterValueChangedEvent, (state, value) => {
-    console.log("state = ", state);
-    console.log("value = ", value);
     invertFlagEvent()
     getNotesEffect()
     return value

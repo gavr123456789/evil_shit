@@ -1,8 +1,9 @@
-import { Button, List, Space } from "antd";
-import { Stats } from "fs";
+import { List, Space } from "antd";
+
 import { FC } from "react";
 import { createNewId } from "services/utils";
-import { IDirRow, IFileRow } from "./pagesStore";
+import { addPage } from "./model/pagesStore";
+import { IDirRow, IFileRow } from "./model/types";
 
 export interface DirItemProps {
   path: string;
@@ -13,11 +14,8 @@ export const DirRow: FC<DirItemProps> = ({ item, path }) => {
   return (
     <List.Item
       key={createNewId()}
-      onClick={(x) => {
-        if (x.button === 1) {
-          console.log("clicked ", path);
-          // createPage(path);
-        }
+      onClick={() => {
+        addPage(path + "/" + item.name)
         
       }}
     >
@@ -44,9 +42,8 @@ export const FileRow: FC<FileItem> = ({ item, path }) => {
     <List.Item
       key={createNewId()}
       onClick={(x) => {
-        if (x.button === 1) {
-          console.log("clicked ", name);
-          // createPage(path);
+        if (x.button === 0) {
+          console.log("clicked file ", path);
         }
         
       }}
@@ -59,3 +56,5 @@ export const FileRow: FC<FileItem> = ({ item, path }) => {
     </List.Item>
   );
 };
+
+

@@ -1,82 +1,65 @@
 import { FSWatcher, watch } from "chokidar";
+import { createStore } from "effector";
 import { stat } from "fs";
 import { basename, dirname, extname } from "path";
-import { fileAdd3 } from "renderer/components/pagesStore";
+import { addFile } from "renderer/components/model/pagesStore";
 
-// const naturalSort = createNewSortInstance({
-//   comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: "base" })
-//     .compare,
-// });
+export const watchedDirs = new Set<string>()
+const DEFAULT_PATH = "/home/gavr/test"
 
-///
-// export const $filePaths = createStore<FileItem[]>([], { name: "filePaths" });
-// export const $dirsPaths = createStore<FileItem[]>([], { name: "dirsPaths" });
+const watcher = watch(DEFAULT_PATH, {
+  ignored: /[\/\\]\./,
+  persistent: true,
+  depth: 0,
+});
+startWatch()
+export function startWatch() {
+  // if (watchedDirs.has(path)) {
+  //   throw new Error("watchedDirs already watch dir " + path)
+  // }
 
-// const fileAdded = createEvent<FileItem>("fileAdded");
-// const dirAdded = createEvent<FileItem>("dirAdded");
+  // watchedDirs.add(path)
 
-// $filePaths.on(fileAdded, (oldVal, newVal) =>
-//   naturalSort([...oldVal, newVal]).asc()
-// );
-// $dirsPaths.on(dirAdded, (oldVal, newVal) =>
-//   naturalSort([...oldVal, newVal]).asc()
-// );
-
-// Соединить сторы в один с сортировкой сначала директорий
-
-// export const $filesAndDirsPaths = combine([$dirsPaths, $filePaths], (items) => [
-//   ...items[0],
-//   ...items[1],
-// ]);
-
-export function startWatch(path: string): FSWatcher {
-  const watcher = watch(path, {
-    ignored: /[\/\\]\./,
-    persistent: true,
-    depth: 1,
-  });
 
   function onWatcherReady() {
-    console.info("WATCHER READY, watching path: ", path);
+    console.info("WATCHER READY, watching paths: ", watcher.getWatched);
   }
 
   watcher
-    .on("add", function (path) {
-      console.log("File", path, "has been added");
+    .on("add", function (newPath) {
+      console.log("File", newPath, "has been added");
 
-      stat(path, (err, stats) => {
+      stat(newPath, (err, stats) => {
         if (err) {
           console.error(err);
           return;
         }
-        console.log("__basename(path) = ", basename(path));
+        // console.log("__dirname(path) = ", dirname(path));
         
-        fileAdd3({
-          path: dirname(path),
+        addFile({
+          path: dirname(newPath),
           dirOrFile: {
             kind: "file",
-            name: basename(path),
-            ext: extname(path),
+            name: basename(newPath),
+            ext: extname(newPath),
             item: stats
           }
         })
-
-
       });
     })
-    .on("addDir", function (path) {
-      console.log("Directory", path, "has been added");
-      stat(path, (err, stats) => {
+    .on("addDir", function (newPath) {
+      console.log("Directory", newPath, "has been added");
+      stat(newPath, (err, stats) => {
         if (err) {
           console.error(err);
           return;
         }
 
-        fileAdd3({
-          path: dirname(path),
+        addFile({
+          path: dirname(newPath),
           dirOrFile: {
             kind: "dir",
-            name: basename(path),
+            name: basename(newPath),
             item: stats
           }
         })
@@ -100,5 +83,12 @@ export function startWatch(path: string): FSWatcher {
       console.log("Raw event info:", event, path, details);
     });
 
-  return watcher;
+  // return watcher;
+}
+
+export function addPathToWatch(path: string) {
+  watcher.add(path)
+}
+export function removePathToWatch(path: string) {
+  watcher.unwatch(path)
 }

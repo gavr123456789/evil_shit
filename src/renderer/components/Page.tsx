@@ -3,23 +3,19 @@ import { FSWatcher } from "chokidar";
 
 import { useState, useEffect, FC } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { startWatch } from "services/FileService";
+import { addPathToWatch, removePathToWatch, startWatch, watchedDirs } from "services/FileService";
 import { createNewId } from "services/utils";
-import { DirRow, FileRow } from "./FileRow";
+import { Page } from "./model/types";
+import { DirRow, FileRow } from "./Row";
 
-import { Page } from "./pagesStore";
 
 interface FileListProps {
   page: Page;
 }
 
 export const FilePage: FC<FileListProps> = ({ page }) => {
-  console.log("__FilePage, page = ", page);
-  
-  // const files = useStore($filesAndDirsPaths)
-  // const pages = useStore($pages3)
 
-  const [watcher, setWatcher] = useState<FSWatcher | null>(null);
+  // const [watcher, setWatcher] = useState<FSWatcher | null>(null);
   const loadMoreData = () => {
     // if (loading) {
     //   return;
@@ -28,9 +24,15 @@ export const FilePage: FC<FileListProps> = ({ page }) => {
   };
 
   useEffect(() => {
-    setWatcher(startWatch(page.path));
+    // setWatcher(startWatch(page.path));
+    console.log("ADDED WATCHER FOR DIR ", page.path);
+    addPathToWatch(page.path)
     return function cleanup() {
-      watcher?.close().then(() => console.log("watcher closed"));
+      // watcher?.close().then(() => {
+      //   console.log("watcher closed"); 
+      // });
+      removePathToWatch(page.path)
+      watchedDirs.delete(page.path)
     };
   }, [page.path]);
 
@@ -50,7 +52,7 @@ export const FilePage: FC<FileListProps> = ({ page }) => {
         next={loadMoreData}
         hasMore={false}
         loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-        endMessage={<Divider plain>nothing more</Divider>}
+        endMessage={<Divider plain></Divider>}
         scrollableTarget="scrollableDiv"
       >
         <List

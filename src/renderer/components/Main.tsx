@@ -1,8 +1,9 @@
 import { Space } from "antd";
 import { FC } from "react";
 import { useStore } from "effector-react";
-import { FilePage } from "./FilePage";
-import { $pages3 } from "./pagesStore";
+import { FilePage } from "./Page";
+import { $pages3 } from "./model/pagesStore";
+import 'effector-logger/inspector';
 
 
 export const MainComponent: FC = () => {
