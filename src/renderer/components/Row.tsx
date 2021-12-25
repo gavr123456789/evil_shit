@@ -1,5 +1,6 @@
 import { List, Space } from "antd";
-
+import { shell } from "electron";
+import { join } from "path";
 import { FC } from "react";
 import { createNewId } from "services/utils";
 import { addPage } from "./model/pagesStore";
@@ -15,7 +16,7 @@ export const DirRow: FC<DirItemProps> = ({ item, path }) => {
     <List.Item
       key={createNewId()}
       onClick={() => {
-        addPage(path + "/" + item.name)
+        addPage(join(path, item.name)  )
         
       }}
     >
@@ -44,8 +45,8 @@ export const FileRow: FC<FileItem> = ({ item, path }) => {
       onClick={(x) => {
         if (x.button === 0) {
           console.log("clicked file ", path);
+          shell.openPath(join(path, item.name));
         }
-        
       }}
     >
       <List.Item.Meta

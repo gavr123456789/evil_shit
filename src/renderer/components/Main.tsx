@@ -10,7 +10,7 @@ export const MainComponent: FC = () => {
   const pages = useStore($pages3);
 
   return (
-    <Space style={{ margin: 6 }}>
+    <Space direction="horizontal" style={{ margin: 6 }}>
       {pages.map((page) => (
         <FilePage page={page} />
       ))}

@@ -15,7 +15,6 @@ interface FileListProps {
 
 export const FilePage: FC<FileListProps> = ({ page }) => {
 
-  // const [watcher, setWatcher] = useState<FSWatcher | null>(null);
   const loadMoreData = () => {
     // if (loading) {
     //   return;
@@ -24,13 +23,9 @@ export const FilePage: FC<FileListProps> = ({ page }) => {
   };
 
   useEffect(() => {
-    // setWatcher(startWatch(page.path));
     console.log("ADDED WATCHER FOR DIR ", page.path);
     addPathToWatch(page.path)
     return function cleanup() {
-      // watcher?.close().then(() => {
-      //   console.log("watcher closed"); 
-      // });
       removePathToWatch(page.path)
       watchedDirs.delete(page.path)
     };
@@ -40,7 +35,7 @@ export const FilePage: FC<FileListProps> = ({ page }) => {
     <div
       id="scrollableDiv"
       style={{
-        height: "auto",
+        height: "100%",
         minWidth: 250,
         // overflow: "auto",
         padding: "0 16px",
