@@ -5,7 +5,7 @@ import { useState, useEffect, FC } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { addPathToWatch, removePathToWatch, startWatch, watchedDirs } from "services/FileService";
 import { createNewId } from "services/utils";
-import { Page } from "./model/types";
+import { Page } from "../model/types";
 import { DirRow, FileRow } from "./Row";
 
 

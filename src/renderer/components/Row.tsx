@@ -3,8 +3,8 @@ import { shell } from "electron";
 import { join } from "path";
 import { FC } from "react";
 import { createNewId } from "services/utils";
-import { addPage } from "./model/pagesStore";
-import { IDirRow, IFileRow } from "./model/types";
+import { addPage } from "../model/pagesStore";
+import { IDirRow, IFileRow } from "../model/types";
 
 export interface DirItemProps {
   path: string;

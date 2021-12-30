@@ -2,7 +2,7 @@ import { Space } from "antd";
 import { FC } from "react";
 import { useStore } from "effector-react";
 import { FilePage } from "./Page";
-import { $pages3 } from "./model/pagesStore";
+import { $pages3 } from "../model/pagesStore";
 import 'effector-logger/inspector';
 
 

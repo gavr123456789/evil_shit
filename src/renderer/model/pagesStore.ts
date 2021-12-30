@@ -22,6 +22,7 @@ export const $pages3 = createStore<Page[]>(
 
 
 export const addFile = createEvent<FileOrDirAddEventData>("fileAdd");
+export const deleteFile = createEvent<FileOrDirAddEventData>("deleteFile");
 export const addPage = createEvent<string>("addPage");
 export const removePage = createEvent<string>("removePage");
 
@@ -77,10 +78,45 @@ function onFileOrDirAdd(
   // добавить обратно папки и файлы
   page.dirsAndFiles = [...dirs, ...files]
 
-  // const sas = [...result]
   
   return [...result];
 }
+
+function onFileOrDirDelete(
+  pages: Page[],
+  dirOrFileEventData: FileOrDirAddEventData
+): Page[] | void {
+  
+  const result = pages;
+  // найти нужную страцину по path
+  const page = pages.find((x) => x.path === dirOrFileEventData.path);
+  if (!page) return;
+  page.dirsAndFiles = 
+    page.dirsAndFiles.filter(x => x.name !== dirOrFileEventData.dirOrFile.name)
+  
+  // // вынуть все файлы и все папки
+  // let dirs = page.dirsAndFiles.filter((x) => x.kind === "dir");
+  // let files = page.dirsAndFiles.filter((x) => x.kind === "file");
+  
+  // // добавить файл или директорию и сразу отсортировать
+  // switch (dirOrFileEventData.dirOrFile.kind) {
+  //   case "dir":
+  //     dirs.push(dirOrFileEventData.dirOrFile);
+  //     dirs = naturalSort(dirs).asc();
+  //     break;
+  //   case "file":
+  //     files.push(dirOrFileEventData.dirOrFile);
+  //     files = naturalSort(files).asc();
+  //     break;
+  // }
+
+  // // добавить обратно папки и файлы
+  // page.dirsAndFiles = [...dirs, ...files]
+
+  
+  return [...result];
+}
+
 
 function onRemovePage(pages: Page[], path: string) {
   return pages.filter(x => x.path !== path)
@@ -98,4 +134,5 @@ function onAddPage(state: Page[], path: string) {
 
 $pages3.on(addUnique, onAddPage);
 $pages3.on(addFile, onFileOrDirAdd);
+$pages3.on(deleteFile, onFileOrDirDelete);
 $pages3.on(removePage, onRemovePage);

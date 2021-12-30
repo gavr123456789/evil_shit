@@ -2,7 +2,7 @@ import { FSWatcher, watch } from "chokidar";
 import { createStore } from "effector";
 import { stat } from "fs";
 import { basename, dirname, extname } from "path";
-import { addFile } from "renderer/components/model/pagesStore";
+import { addFile } from "renderer/model/pagesStore";
 
 export const watchedDirs = new Set<string>()
 const DEFAULT_PATH = "/home/gavr/test"
