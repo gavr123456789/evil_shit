@@ -12,7 +12,7 @@ export interface IDirRow {
   item: Stats;
 }
 
-type DirOrFileRow = IDirRow | IFileRow;
+export type DirOrFileRow = IDirRow | IFileRow;
 
 export interface FileOrDirAddEventData {
   path: string;

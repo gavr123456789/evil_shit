@@ -27,7 +27,6 @@ export const DirRow: FC<DirItemProps> = ({ item, path }) => {
           addPage(join(path, item.name)  )
         }
       }}
-
     >
       <Space direction="horizontal" style={{ margin: 6 }}>
         <List.Item.Meta

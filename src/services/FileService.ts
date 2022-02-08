@@ -1,7 +1,14 @@
-import { FSWatcher, watch } from "chokidar";
+import { watch } from "chokidar";
+import { createNewSortInstance } from "fast-sort";
 import { stat } from "fs";
 import { basename, dirname, extname } from "path";
-import { addFile } from "renderer/model/pagesStore";
+import { addFile, addFileOld } from "renderer/model/pagesStore";
+import { DirOrFileRow } from "renderer/model/types";
+
+const naturalSort = createNewSortInstance({
+  comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: "base" })
+    .compare,
+})
 
 // export const watchedDirs = new Set<string>()
 const DEFAULT_PATH = "/home/gavr/test"
@@ -12,6 +19,10 @@ const watcher = watch(DEFAULT_PATH, {
   depth: 0,
 });
 
+
+export const globalCatcheDirs = new Map<string, Array<DirOrFileRow>>()
+export const globalCatcheFiles = new Map<string, Array<DirOrFileRow>>()
+
 startWatch()
 export function startWatch() {
 
@@ -21,42 +32,60 @@ export function startWatch() {
 
   watcher
     .on("add", function (newPath) {
-      console.log("File", newPath, "has been added");
 
       stat(newPath, (err, stats) => {
         if (err) {
           console.error(err);
           return;
         }
-        // console.log("__dirname(path) = ", dirname(path));
 
-        addFile({
-          path: dirname(newPath),
-          dirOrFile: {
-            kind: "file",
-            name: basename(newPath),
-            ext: extname(newPath),
-            item: stats
-          }
+        const dirWhereFileAdded = dirname(newPath)
+        let globalFilesArray = globalCatcheFiles.get(dirWhereFileAdded)
+        if (!globalFilesArray) {
+          const a = new Array<DirOrFileRow>()
+          globalCatcheFiles.set(dirWhereFileAdded, a)
+          globalFilesArray = a
+        }
+
+        globalFilesArray.push({
+          kind: "file",
+          name: basename(newPath),
+          ext: extname(newPath),
+          item: stats
         })
+
+        // globalFilesArray = naturalSort(globalFilesArray).asc()
+
+
+        addFile(dirWhereFileAdded)
+
       });
     })
     .on("addDir", function (newPath) {
-      console.log("Directory", newPath, "has been added");
+
       stat(newPath, (err, stats) => {
         if (err) {
           console.error(err);
           return;
         }
 
-        addFile({
-          path: dirname(newPath),
-          dirOrFile: {
-            kind: "dir",
-            name: basename(newPath),
-            item: stats
-          }
+        const dirWhereDirAdded = dirname(newPath)
+        let globalDirs = globalCatcheDirs.get(dirWhereDirAdded)
+
+        if (!globalDirs) {
+          const a = new Array<DirOrFileRow>()
+          globalCatcheDirs.set(dirWhereDirAdded, a)
+          globalDirs = a
+        }
+
+        globalDirs.push({
+          kind: "dir",
+          name: basename(newPath),
+          item: stats
         })
+
+        addFile(dirWhereDirAdded)
+
       });
     })
     .on("change", function (path) {
@@ -85,6 +114,6 @@ export function addPathToWatch(path: string) {
   watcher.add(path)
 }
 export function removePathToWatch(path: string) {
-  console.log("_removing page from watch: ", path);
-  watcher.unwatch(path)
+  // console.log("_removing page from watch: ", path);
+  // watcher.unwatch(path)
 }

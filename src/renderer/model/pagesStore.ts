@@ -1,13 +1,13 @@
 import { createEvent, createStore, guard, sample } from "effector";
 import { createNewSortInstance } from "fast-sort";
-import { addPathToWatch, removePathToWatch } from "services/FileService";
+import { addPathToWatch, globalCatcheDirs, globalCatcheFiles, removePathToWatch } from "services/FileService";
 import { FileOrDirAddEventData, Page } from "./types";
 
 // sort funcs
 const naturalSort = createNewSortInstance({
   comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: "base" })
     .compare,
-});
+})
 
 
 export const $pages3 = createStore<Page[]>(
@@ -22,8 +22,11 @@ export const $pages3 = createStore<Page[]>(
 
 
 
-export const addFile = createEvent<FileOrDirAddEventData>("fileAdd");
-export const deleteFile = createEvent<FileOrDirAddEventData>("deleteFile");
+export const addFileOld = createEvent<FileOrDirAddEventData>("fileAdd");
+export const deleteFileOld = createEvent<FileOrDirAddEventData>("deleteFile");
+export const addFile = createEvent<string>("fileAdd"); // путь в котором добавился файл
+export const deleteFile = createEvent<string>("deleteFile"); // путь в котором удалился файл
+
 
 export const addPage = createEvent<string>("addPage"); // pagePath
 export const removePage = createEvent<string>("removePage"); // pagePath
@@ -80,6 +83,32 @@ function onFileOrDirAdd(
   return [...result];
 }
 
+function onFileOrDirAddNew(pages: Page[], pathWhereAdded: string): Page[] | void {
+  // Взять из глобала список
+  const dirsArray = globalCatcheDirs.get(pathWhereAdded)
+  const filesArray = globalCatcheFiles.get(pathWhereAdded)
+  const page = pages.find((x) => x.path === pathWhereAdded);
+
+  if (!dirsArray || !filesArray || !page) {
+    return
+  }
+
+  // Отсортировать
+  // const dirsArray = Array.from(dirsSet)
+  const sortedDirs = naturalSort(dirsArray).asc()
+  const sortedFiles = naturalSort(filesArray).asc()
+  // Положить в соответстующую page
+
+  // const filesFromPage = page.dirsAndFiles.filter(x => x.kind === "file")
+
+  page.dirsAndFiles = [...sortedDirs, ...sortedFiles]
+  return [...pages]
+}
+
+function onFileOrDirDeleteNew(pages: Page[], pathWhereDeleted: string): Page[] | void {
+
+}
+
 function onFileOrDirDelete(
   pages: Page[],
   dirOrFileEventData: FileOrDirAddEventData
@@ -128,11 +157,26 @@ function onAddPage(state: Page[], path: string) {
     path: path
   }
 
-  addPathToWatch(path)
+  // Если в кеше есть, значит на эту страницу уже заходили и нужно только взять данные
+  const globalDirs = globalCatcheDirs.get(path)
+  const globalFiles = globalCatcheFiles.get(path)
+
+  if (globalDirs && globalFiles) {
+    newPage.dirsAndFiles = [...globalDirs, ...globalFiles]
+  } else {
+    addPathToWatch(path)
+  }
+
+  // Иначе добавить путь к наблюдаемым
+
+
+
   return [...state, newPage]
 }
 
 $pages3.on(addUnique, onAddPage);
-$pages3.on(addFile, onFileOrDirAdd);
-$pages3.on(deleteFile, onFileOrDirDelete);
+$pages3.on(addFileOld, onFileOrDirAdd);
+$pages3.on(addFile, onFileOrDirAddNew);
+$pages3.on(deleteFile, onFileOrDirDeleteNew);
+$pages3.on(deleteFileOld, onFileOrDirDelete);
 $pages3.on(removePage, onRemovePage);
