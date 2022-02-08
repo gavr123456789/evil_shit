@@ -38,6 +38,7 @@ export function startWatch() {
           console.error(err);
           return;
         }
+        console.log("add File, global files = ", globalCatcheFiles);
 
         const dirWhereFileAdded = dirname(newPath)
         let globalFilesArray = globalCatcheFiles.get(dirWhereFileAdded)
@@ -68,6 +69,8 @@ export function startWatch() {
           console.error(err);
           return;
         }
+
+        console.log("add Dir, global dirs = ", globalCatcheDirs);
 
         const dirWhereDirAdded = dirname(newPath)
         let globalDirs = globalCatcheDirs.get(dirWhereDirAdded)

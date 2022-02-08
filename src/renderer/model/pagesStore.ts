@@ -49,59 +49,29 @@ const addUnique = sample({
   clock: addUniqueGuard
 })
 
-
-function onFileOrDirAdd(
-  pages: Page[],
-  dirOrFileEventData: FileOrDirAddEventData
-): Page[] | void {
-
-  const result = pages;
-  // найти нужную страцину по path
-  const page = pages.find((x) => x.path === dirOrFileEventData.path);
-  if (!page) return;
-
-  // вынуть все файлы и все папки
-  let dirs = page.dirsAndFiles.filter((x) => x.kind === "dir");
-  let files = page.dirsAndFiles.filter((x) => x.kind === "file");
-
-  // добавить файл или директорию и сразу отсортировать
-  switch (dirOrFileEventData.dirOrFile.kind) {
-    case "dir":
-      dirs.push(dirOrFileEventData.dirOrFile);
-      dirs = naturalSort(dirs).asc();
-      break;
-    case "file":
-      files.push(dirOrFileEventData.dirOrFile);
-      files = naturalSort(files).asc();
-      break;
-  }
-
-  // добавить обратно папки и файлы
-  page.dirsAndFiles = [...dirs, ...files]
-
-
-  return [...result];
-}
-
 function onFileOrDirAddNew(pages: Page[], pathWhereAdded: string): Page[] | void {
+  console.log("Добавили на страницу: ", pathWhereAdded);
+
   // Взять из глобала список
   const dirsArray = globalCatcheDirs.get(pathWhereAdded)
   const filesArray = globalCatcheFiles.get(pathWhereAdded)
   const page = pages.find((x) => x.path === pathWhereAdded);
 
-  if (!dirsArray || !filesArray || !page) {
+  if (!page) {
+    console.log("exit from addig, dirsArray = ", dirsArray, " filesArray = ", filesArray, " page = ", page);
     return
   }
 
+  // 4 варианта, либо только файлоы, либо только директории либо и то и то либо ничего
+
   // Отсортировать
   // const dirsArray = Array.from(dirsSet)
-  const sortedDirs = naturalSort(dirsArray).asc()
-  const sortedFiles = naturalSort(filesArray).asc()
+  const sortedDirs = naturalSort(dirsArray ?? []).asc()
+  const sortedFiles = naturalSort(filesArray ?? []).asc()
   // Положить в соответстующую page
-
-  // const filesFromPage = page.dirsAndFiles.filter(x => x.kind === "file")
-
   page.dirsAndFiles = [...sortedDirs, ...sortedFiles]
+  console.log("add dirsAndFiles: ", page.dirsAndFiles);
+
   return [...pages]
 }
 
@@ -175,7 +145,7 @@ function onAddPage(state: Page[], path: string) {
 }
 
 $pages3.on(addUnique, onAddPage);
-$pages3.on(addFileOld, onFileOrDirAdd);
+// $pages3.on(addFileOld, onFileOrDirAdd);
 $pages3.on(addFile, onFileOrDirAddNew);
 $pages3.on(deleteFile, onFileOrDirDeleteNew);
 $pages3.on(deleteFileOld, onFileOrDirDelete);
