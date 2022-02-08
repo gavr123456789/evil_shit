@@ -1,9 +1,8 @@
-import { Skeleton, Divider, List } from "antd";
-import { FSWatcher } from "chokidar";
+import { Skeleton, Divider, List, Button, Space } from "antd";
 
-import { useState, useEffect, FC } from "react";
+import { FC } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { addPathToWatch, removePathToWatch, startWatch, watchedDirs } from "services/FileService";
+import { removePage } from "renderer/model/pagesStore";
 import { createNewId } from "services/utils";
 import { Page } from "../model/types";
 import { DirRow, FileRow } from "./Row";
@@ -16,23 +15,20 @@ interface FileListProps {
 export const FilePage: FC<FileListProps> = ({ page }) => {
 
   const loadMoreData = () => {
-    // if (loading) {
-    //   return;
-    // }
-    // setLoading(false)
+
   };
 
-  useEffect(() => {
-    console.log("ADDED WATCHER FOR DIR ", page.path);
-    addPathToWatch(page.path)
-    return function cleanup() {
-      removePathToWatch(page.path)
-      watchedDirs.delete(page.path)
-    };
-  }, [page.path]);
+  // useEffect(() => {
+    // console.log("ADDED WATCHER FOR DIR ", page.path);
+    // addPathToWatch(page.path)
+    // return function cleanup() {
+    //   removePathToWatch(page.path)
+    // };
+  // }, [page.path]);
 
   return (
     <div
+      key={createNewId()}
       id="scrollableDiv"
       style={{
         height: "100%",
@@ -50,14 +46,19 @@ export const FilePage: FC<FileListProps> = ({ page }) => {
         endMessage={<Divider plain></Divider>}
         scrollableTarget="scrollableDiv"
       >
+        <Space>
+          <Button onClick={() => removePage(page.path)} key="back" > back </Button>
+          <Button onClick={() => removePage(page.path)} key="delete" > delete </Button>
+        </Space>
+
         <List
           dataSource={page.dirsAndFiles}
           renderItem={(x) =>
-            x.kind === "file" 
-            ? 
-              <FileRow key={createNewId()} path={page.path} item={x} /> 
+            x.kind === "file"
+            ?
+              <FileRow key={createNewId()} path={page.path} item={x} />
             :
-              <DirRow key={createNewId()} path={page.path} item={x} /> 
+              <DirRow key={createNewId()} path={page.path} item={x} />
           }
           size="large"
         />

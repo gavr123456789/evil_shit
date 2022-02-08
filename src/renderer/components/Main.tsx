@@ -4,6 +4,7 @@ import { useStore } from "effector-react";
 import { FilePage } from "./Page";
 import { $pages3 } from "../model/pagesStore";
 import 'effector-logger/inspector';
+import { createNewId } from "services/utils";
 
 
 export const MainComponent: FC = () => {
@@ -12,7 +13,7 @@ export const MainComponent: FC = () => {
   return (
     <Space direction="horizontal" style={{ margin: 6 }}>
       {pages.map((page) => (
-        <FilePage page={page} />
+        <FilePage key={createNewId()} page={page} />
       ))}
       {/* <EffectorTest /> */}
     </Space>

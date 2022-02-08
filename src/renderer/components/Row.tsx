@@ -5,6 +5,8 @@ import { FC } from "react";
 import { createNewId } from "services/utils";
 import { addPage } from "../model/pagesStore";
 import { IDirRow, IFileRow } from "../model/types";
+import { FileOutlined, FolderOutlined } from "@ant-design/icons";
+
 
 export interface DirItemProps {
   path: string;
@@ -15,21 +17,28 @@ export const DirRow: FC<DirItemProps> = ({ item, path }) => {
   return (
     <List.Item
       key={createNewId()}
-      onClick={() => {
-        addPage(join(path, item.name)  )
-        
+      onClick={(e) => {
+        // console.log("clicked: ", e.button);
+        // open dir here
       }}
+      onMouseDown={(e)=> {
+        if (e.button === 1){
+          e.preventDefault()
+          addPage(join(path, item.name)  )
+        }
+      }}
+
     >
       <Space direction="horizontal" style={{ margin: 6 }}>
         <List.Item.Meta
-          // avatar={<Avatar src={item.picture.large} />}
+          avatar={<FolderOutlined />}
           title={<a>{item.name}</a>}
           description={path}
         />
         {/* <Button> {"->"} </Button> */}
       </Space>
     </List.Item>
-    
+
   );
 };
 
@@ -51,6 +60,8 @@ export const FileRow: FC<FileItem> = ({ item, path }) => {
     >
       <List.Item.Meta
         // avatar={<Avatar src={item.picture.large} />}
+        avatar={<FileOutlined />}
+
         title={<a>{item.name}</a>}
         description={path}
       />
