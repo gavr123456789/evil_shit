@@ -16,6 +16,15 @@ import { FC } from 'react'
 // EFFECTOR
 // создал стор
 const $counderStore = createStore(0, {name: "counderStore"})
+
+const counterValueChangedEvent = createEvent<number>("counterValueChangedEvent")
+
+$counderStore
+  .on(counterValueChangedEvent, (state, value) => {
+    return state + value
+  })
+
+
 const $flagStore = createStore(false, {name: "flagStore"})
 const $nones = createStore<Note[]>([], {name: "nones"})
 
@@ -38,7 +47,6 @@ const getNotesEffect = createEffect<void, Note[]>("get notes").use(async () => {
 
 
 // евент
-const counterValueChangedEvent = createEvent<number>("counterValueChangedEvent")
 const invertFlagEvent = createEvent("invertFlagEvent")
 
 
@@ -50,12 +58,6 @@ $nones
 $flagStore
   .on(invertFlagEvent, (state) => !state)
 
-$counderStore
-  .on(counterValueChangedEvent, (state, value) => {
-    invertFlagEvent()
-    getNotesEffect()
-    return value
-  } )
 
 // RENDER
 
@@ -70,7 +72,7 @@ export const EffectorTest: FC = () => {
 
   return (<>
 
-    <Button onClick={_ => counterValueChangedEvent(input + 1)} style={{borderColor: flagStore ? "blue" :"red"}} > 
+    <Button onClick={_ => counterValueChangedEvent(input + 1)} style={{borderColor: flagStore ? "blue" :"red"}} >
       {input}
     </Button>
     <Space>

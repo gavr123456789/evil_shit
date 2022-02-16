@@ -65,12 +65,9 @@ export function startWatch() {
     .on("addDir", function (newPath) {
 
       stat(newPath, (err, stats) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
+        if (err) { console.error(err); return; }
 
-        console.log("add Dir, global dirs = ", globalCatcheDirs);
+        console.log("add Dir, global dirs = ", globalCatcheDirs)
 
         const dirWhereDirAdded = dirname(newPath)
         let globalDirs = globalCatcheDirs.get(dirWhereDirAdded)
