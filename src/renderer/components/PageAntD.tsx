@@ -5,19 +5,22 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { removePage } from "renderer/model/pagesStore";
 import { createNewId } from "services/utils";
 import { Page } from "../model/types";
-import { DirRow, FileRow } from "./Row";
-import Parser = require("web-tree-sitter")
+import { DirRow, FileRow } from "./RowAntD";
 
-Parser.init()
+// import Parser = require("web-tree-sitter")
+
+// Parser.init()
+
+
+
+// async function treeSitterTest() {
+//   const parser = new Parser;
+//   const JavaScript = await Parser.Language.load('/path/to/tree-sitter-javascript.wasm');
+//   parser.setLanguage(JavaScript);
+// }
 
 interface FileListProps {
   page: Page;
-}
-
-async function treeSitterTest() {
-  const parser = new Parser;
-  const JavaScript = await Parser.Language.load('/path/to/tree-sitter-javascript.wasm');
-  parser.setLanguage(JavaScript);
 }
 
 export const FilePage: FC<FileListProps> = ({ page }) => {

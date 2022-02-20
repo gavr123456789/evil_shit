@@ -7,7 +7,7 @@ import "swiper/css/bundle";
 import RecipeReviewCard from "../CardExample";
 import { $pages3 } from "renderer/model/pagesStore";
 import { useStore } from "effector-react";
-import { FilePage } from "../Page";
+import { FilePage } from "../PageAntD";
 import { createNewId } from "services/utils";
 
 export const CarouselSwiper: FC = () => {

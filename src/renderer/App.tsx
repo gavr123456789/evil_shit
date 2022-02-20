@@ -3,6 +3,8 @@ import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 import 'antd/dist/antd.css';
 import { MainComponent } from './components/Main';
+import { ThemeProvider } from '@mui/system';
+import { createTheme } from '@mui/material/styles'
 
 const Main = () => {
   const [x, setX] = useState(0);
@@ -11,12 +13,23 @@ const Main = () => {
   );
 };
 
+// disable uppercase on 
+const theme = createTheme({
+  typography: {
+    button: {
+      textTransform: 'none'
+    }
+  }
+});
+
 export default function App() {
   return (
     <Router>
+      <ThemeProvider theme={theme}>
       <Switch>
         <Route path="/" component={Main} />
       </Switch>
+      </ThemeProvider>
     </Router>
   );
 }
