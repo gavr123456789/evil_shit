@@ -14,24 +14,22 @@ export const FileRow: FC<FileItemProps2> = (props) => {
 
 	const handleFormat = (_event: React.MouseEvent<HTMLElement>, newActiveBtns: number[]) => {
 		setActiveBtns(newActiveBtns);
+    if (newActiveBtns.includes(1)) {
+      
+		}
 	};
 
-
 	return (
-		<ListItem disablePadding>
+		<ListItem disableGutters >
+			<ToggleButtonGroup sx={{ flexGrow: 1 }} value={activeBtns} onChange={handleFormat} size="small">
+				<ToggleButton color="primary" sx={{ flexGrow: 1 }} value={1}>
+					{item.name}
+				</ToggleButton>
 
-				<ToggleButtonGroup sx={{flexGrow:1}}  value={activeBtns} onChange={handleFormat} size="small">
-					<ToggleButton sx={{flexGrow:1}} value={1}>
-						{item.name}
-					</ToggleButton>
-
-					<ToggleButton
-						value={2}
-					>
-						<ArrowForwardIosIcon fontSize='small' />
-					</ToggleButton>
-				</ToggleButtonGroup>
-
+				<ToggleButton color="primary" value={2}>
+					<ArrowForwardIosIcon fontSize="small" />
+				</ToggleButton>
+			</ToggleButtonGroup>
 		</ListItem>
 	);
 };

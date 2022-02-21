@@ -5,6 +5,7 @@ import 'antd/dist/antd.css';
 import { MainComponent } from './components/Main';
 import { ThemeProvider } from '@mui/system';
 import { createTheme } from '@mui/material/styles'
+import { green } from '@mui/material/colors';
 
 const Main = () => {
   const [x, setX] = useState(0);
@@ -13,8 +14,11 @@ const Main = () => {
   );
 };
 
-// disable uppercase on 
+// disable uppercase on
 const theme = createTheme({
+  // palette: {
+  //   primary: green
+  // },
   typography: {
     button: {
       textTransform: 'none'

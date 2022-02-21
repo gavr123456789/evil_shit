@@ -2,7 +2,7 @@ import { watch } from "chokidar";
 import { createNewSortInstance } from "fast-sort";
 import { stat } from "fs";
 import { basename, dirname, extname } from "path";
-import { addFile, addFileOld } from "renderer/model/pagesStore";
+import { addFile, addFileOld, deleteFile } from "renderer/model/pagesStore";
 import { DirOrFileRow } from "renderer/model/types";
 
 const naturalSort = createNewSortInstance({
@@ -19,7 +19,7 @@ const watcher = watch(DEFAULT_PATH, {
   depth: 0,
 });
 
-
+// TODO Держать в коллекциях флаг отсортирована она или нет
 export const globalCatcheDirs = new Map<string, Array<DirOrFileRow>>()
 export const globalCatcheFiles = new Map<string, Array<DirOrFileRow>>()
 
@@ -38,14 +38,13 @@ export function startWatch() {
           console.error(err);
           return;
         }
-        console.log("add File, global files = ", globalCatcheFiles);
 
         const dirWhereFileAdded = dirname(newPath)
         let globalFilesArray = globalCatcheFiles.get(dirWhereFileAdded)
+        // Если мы на этой странице еще не были, то создаем массив
         if (!globalFilesArray) {
-          const a = new Array<DirOrFileRow>()
-          globalCatcheFiles.set(dirWhereFileAdded, a)
-          globalFilesArray = a
+          globalFilesArray = []
+          globalCatcheFiles.set(dirWhereFileAdded, globalFilesArray)
         }
 
         globalFilesArray.push({
@@ -54,9 +53,6 @@ export function startWatch() {
           ext: extname(newPath),
           item: stats
         })
-
-        // globalFilesArray = naturalSort(globalFilesArray).asc()
-
 
         addFile(dirWhereFileAdded)
 
@@ -67,15 +63,12 @@ export function startWatch() {
       stat(newPath, (err, stats) => {
         if (err) { console.error(err); return; }
 
-        console.log("add Dir, global dirs = ", globalCatcheDirs)
-
         const dirWhereDirAdded = dirname(newPath)
         let globalDirs = globalCatcheDirs.get(dirWhereDirAdded)
 
         if (!globalDirs) {
-          const a = new Array<DirOrFileRow>()
-          globalCatcheDirs.set(dirWhereDirAdded, a)
-          globalDirs = a
+          globalDirs = []
+          globalCatcheDirs.set(dirWhereDirAdded, globalDirs)
         }
 
         globalDirs.push({
@@ -83,6 +76,9 @@ export function startWatch() {
           name: basename(newPath),
           item: stats
         })
+
+        console.log("Dir was added", newPath);
+
 
         addFile(dirWhereDirAdded)
 
@@ -93,9 +89,29 @@ export function startWatch() {
     })
     .on("unlink", function (path) {
       console.log("File", path, "has been removed");
+      const dirName = dirname(path)
+      const baseName = basename(path)
+
+      const dirWhereFileDeleted = dirName
+      const filesArray = globalCatcheFiles.get(dirWhereFileDeleted)
+      // Если мы на этой странице были, то нужно удалить оттуда файл
+      if (filesArray) {
+        globalCatcheFiles.set(dirWhereFileDeleted, filesArray.filter(x => x.name != baseName))
+      }
+      deleteFile({baseName: baseName, dirName: dirName})
     })
     .on("unlinkDir", function (path) {
       console.log("Directory", path, "has been removed");
+      const dirName = dirname(path)
+      const baseName = basename(path)
+      const dirWhereDirDeleted = dirName
+      const dirsArray = globalCatcheDirs.get(dirWhereDirDeleted)
+
+      // Если мы на этой странице были, то нужно удалить оттуда директорию
+      if (dirsArray) {
+        globalCatcheDirs.set(dirWhereDirDeleted, dirsArray.filter(x => x.name !== baseName ))
+      }
+      deleteFile({baseName: baseName, dirName: dirName})
     })
     .on("error", function (error) {
       console.log("Error happened", error);
@@ -103,17 +119,15 @@ export function startWatch() {
     .on("ready", onWatcherReady)
     .on("raw", function (event, path, details) {
       // This event should be triggered everytime something happens.
-      console.log("Raw event info:", event, path, details);
+      // console.log("Raw event info:", event, path, details);
     });
 
-  // return watcher;
 }
 
 export function addPathToWatch(path: string) {
   console.log("_add path to watch ", path);
   watcher.add(path)
 }
-export function removePathToWatch(path: string) {
-  // console.log("_removing page from watch: ", path);
-  // watcher.unwatch(path)
-}
+// export function removePathToWatch(path: string) {
+//   // watcher.unwatch(path)
+// }

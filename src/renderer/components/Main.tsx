@@ -1,42 +1,37 @@
 import { FC } from "react";
-import { useStore } from "effector-react";
-import { $pages3 } from "../model/pagesStore";
 import 'effector-logger/inspector';
-import { createNewId } from "services/utils";
 
-import { Box, List, ListItem, Stack } from "@mui/material";
-import { FilePage } from "./FileList";
+import { CarouselSwiper } from "./Swiper/CarouselSwiper";
+import { Button, ButtonGroup, IconButton } from "@mui/material";
+import { useStore } from "effector-react";
+import { $pages3 } from "renderer/model/pagesStore";
 
+import MoveDownRoundedIcon from '@mui/icons-material/MoveDownRounded';
+import FileCopyRoundedIcon from '@mui/icons-material/FileCopyRounded';
+import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 
+const buttonGroup = (
+	<ButtonGroup variant="outlined" aria-label="outlined primary button group">
+		<IconButton>
+			<MoveDownRoundedIcon />
+		</IconButton>
+		<Button>
+			<FileCopyRoundedIcon />
+		</Button>
+		<Button>
+			<DeleteRoundedIcon />
+		</Button>
+	</ButtonGroup>
+);
 
 export const MainComponent: FC = () => {
   const pages = useStore($pages3);
 
   return (
-    // <CarouselSwiper />
-    <Box width={200} >
-      {pages.map(page => (
-        <FilePage key={createNewId()} page={page} />
-      )
+    <>
+      <CarouselSwiper  />
+    </>
 
-      )}
-    </Box>
-
-    // <List sx={{display: 'flex',
-    // flexDirection: 'row', width: 'fit-content'}} dense={true} >
-    //   <ListItem>
-    //     <RecipeReviewCard  />
-    //   </ListItem>
-    //   <ListItem>
-    //     <RecipeReviewCard  />
-    //   </ListItem>
-    //   <ListItem>
-    //     <RecipeReviewCard  />
-    //   </ListItem>
-    //   <ListItem>
-    //     <RecipeReviewCard  />
-    //   </ListItem>
-    // </List>
 
 
     // <Space direction="horizontal" style={{ margin: 6 }}>

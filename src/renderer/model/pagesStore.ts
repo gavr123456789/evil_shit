@@ -1,6 +1,6 @@
 import { createEvent, createStore, guard, sample } from "effector";
 import { createNewSortInstance } from "fast-sort";
-import { addPathToWatch, globalCatcheDirs, globalCatcheFiles, removePathToWatch } from "services/FileService";
+import { addPathToWatch, globalCatcheDirs, globalCatcheFiles } from "services/FileService";
 import { FileOrDirAddEventData, Page } from "./types";
 
 // sort funcs
@@ -20,12 +20,15 @@ export const $pages3 = createStore<Page[]>(
   { name: "pages3" }
 );
 
-
+export interface EventBaseNameAndPath{
+  baseName: string,
+  dirName: string,
+}
 
 export const addFileOld = createEvent<FileOrDirAddEventData>("fileAdd");
 export const deleteFileOld = createEvent<FileOrDirAddEventData>("deleteFile");
 export const addFile = createEvent<string>("fileAdd"); // путь в котором добавился файл
-export const deleteFile = createEvent<string>("deleteFile"); // путь в котором удалился файл
+export const deleteFile = createEvent<EventBaseNameAndPath>("deleteFile"); // путь в котором удалился файл
 
 
 export const addPage = createEvent<string>("addPage"); // pagePath
@@ -49,34 +52,51 @@ const addUnique = sample({
   clock: addUniqueGuard
 })
 
+
+
 function onFileOrDirAddNew(pages: Page[], pathWhereAdded: string): Page[] | void {
-  console.log("Добавили на страницу: ", pathWhereAdded);
 
   // Взять из глобала список
   const dirsArray = globalCatcheDirs.get(pathWhereAdded)
   const filesArray = globalCatcheFiles.get(pathWhereAdded)
   const page = pages.find((x) => x.path === pathWhereAdded);
 
+  // Добавили на страницу которая сейчас не открыта
+  // В кеше файлы все равно появятся, а тут делать ничего не надо
   if (!page) {
-    console.log("exit from addig, dirsArray = ", dirsArray, " filesArray = ", filesArray, " page = ", page);
     return
   }
-
   // 4 варианта, либо только файлоы, либо только директории либо и то и то либо ничего
 
   // Отсортировать
-  // const dirsArray = Array.from(dirsSet)
   const sortedDirs = naturalSort(dirsArray ?? []).asc()
   const sortedFiles = naturalSort(filesArray ?? []).asc()
+
+  console.log("__sortedDirs = ", sortedDirs);
+
   // Положить в соответстующую page
   page.dirsAndFiles = [...sortedDirs, ...sortedFiles]
-  console.log("add dirsAndFiles: ", page.dirsAndFiles);
-
   return [...pages]
 }
 
-function onFileOrDirDeleteNew(pages: Page[], pathWhereDeleted: string): Page[] | void {
+function onFileOrDirDeleteNew(openPages: Page[], pathWhereDeleted: EventBaseNameAndPath): Page[] | void {
 
+  const page = openPages.find((x) => x.path === pathWhereDeleted.dirName);
+
+
+  if (!page) {
+    return
+  }
+  // 4 варианта, либо только файлоы, либо только директории либо и то и то либо ничего
+
+  // Положить в соответстующую page
+  console.log("___result before delete = ", JSON.parse(JSON.stringify(openPages)));
+
+  page.dirsAndFiles = page.dirsAndFiles.filter(x => x.name !== pathWhereDeleted.baseName)
+  const result = [...openPages]
+  console.log("___result after delete = ", JSON.parse(JSON.stringify(result)));
+
+  return result
 }
 
 function onFileOrDirDelete(
@@ -91,7 +111,7 @@ function onFileOrDirDelete(
   page.dirsAndFiles =
     page.dirsAndFiles.filter(x => x.name !== dirOrFileEventData.dirOrFile.name)
 
-  // // вынуть все файлы и все папки
+  // вынуть все файлы и все папки
   let dirs = page.dirsAndFiles.filter((x) => x.kind === "dir");
   let files = page.dirsAndFiles.filter((x) => x.kind === "file");
 
@@ -116,7 +136,7 @@ function onFileOrDirDelete(
 
 
 function onRemovePage(pages: Page[], path: string) {
-  removePathToWatch(path)
+  // removePathToWatch(path)
   return pages.filter(x => x.path !== path)
 }
 
@@ -148,5 +168,5 @@ $pages3.on(addUnique, onAddPage);
 // $pages3.on(addFileOld, onFileOrDirAdd);
 $pages3.on(addFile, onFileOrDirAddNew);
 $pages3.on(deleteFile, onFileOrDirDeleteNew);
-$pages3.on(deleteFileOld, onFileOrDirDelete);
+// $pages3.on(deleteFileOld, onFileOrDirDelete);
 $pages3.on(removePage, onRemovePage);

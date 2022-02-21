@@ -3,8 +3,8 @@ import { shell } from "electron";
 import { join } from "path";
 import { FC } from "react";
 import { createNewId } from "services/utils";
-import { addPage } from "../model/pagesStore";
-import { IDirRow, IFileRow } from "../model/types";
+import { addPage } from "../../model/pagesStore";
+import { IDirRow, IFileRow } from "../../model/types";
 import { FileOutlined, FolderOutlined } from "@ant-design/icons";
 
 
@@ -18,8 +18,7 @@ export const DirRow: FC<DirItemProps> = ({ item, path }) => {
     <List.Item
       key={createNewId()}
       onClick={(e) => {
-        // console.log("clicked: ", e.button);
-        // open dir here
+
       }}
       onMouseDown={(e)=> {
         if (e.button === 1){
@@ -52,7 +51,7 @@ export const FileRow: FC<FileItem> = ({ item, path }) => {
       key={createNewId()}
       onClick={(x) => {
         if (x.button === 0) {
-          console.log("clicked file ", path);
+          
           shell.openPath(join(path, item.name));
         }
       }}

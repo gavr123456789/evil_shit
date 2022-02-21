@@ -4,7 +4,7 @@ import { FC } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { removePage } from "renderer/model/pagesStore";
 import { createNewId } from "services/utils";
-import { Page } from "../model/types";
+import { Page } from "../../model/types";
 import { DirRow, FileRow } from "./RowAntD";
 
 // import Parser = require("web-tree-sitter")
@@ -28,14 +28,6 @@ export const FilePage: FC<FileListProps> = ({ page }) => {
   const loadMoreData = () => {
 
   };
-
-  // useEffect(() => {
-    // console.log("ADDED WATCHER FOR DIR ", page.path);
-    // addPathToWatch(page.path)
-    // return function cleanup() {
-    //   removePathToWatch(page.path)
-    // };
-  // }, [page.path]);
 
   return (
     <div
