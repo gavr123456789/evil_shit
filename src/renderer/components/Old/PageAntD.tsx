@@ -1,17 +1,17 @@
-import { Skeleton, Divider, List, Button, Space } from "antd";
+// import { Skeleton, Divider, List, Button, Space } from "antd";
 
 import { FC } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { removePage } from "renderer/model/pagesStore";
 import { createNewId } from "services/utils";
 import { Page } from "../../model/types";
-import { DirRow, FileRow } from "./RowAntD";
+// import { DirRow, FileRow } from "./RowAntD";
 
 // import Parser = require("web-tree-sitter")
 
 // Parser.init()
 
-
+export const sqwesdf = 2
 
 // async function treeSitterTest() {
 //   const parser = new Parser;
@@ -19,53 +19,53 @@ import { DirRow, FileRow } from "./RowAntD";
 //   parser.setLanguage(JavaScript);
 // }
 
-interface FileListProps {
-  page: Page;
-}
+// interface FileListProps {
+//   page: Page;
+// }
 
-export const FilePage: FC<FileListProps> = ({ page }) => {
+// export const FilePage: FC<FileListProps> = ({ page }) => {
 
-  const loadMoreData = () => {
+//   const loadMoreData = () => {
 
-  };
+//   };
 
-  return (
-    <div
-      key={createNewId()}
-      id="scrollableDiv"
-      style={{
-        height: "100%",
-        minWidth: 250,
-        // overflow: "auto",
-        padding: "0 16px",
-        border: "1px solid rgba(140, 140, 140, 0.35)",
-      }}
-    >
-      <InfiniteScroll
-        dataLength={page.dirsAndFiles.length}
-        next={loadMoreData}
-        hasMore={false}
-        loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-        endMessage={<Divider plain></Divider>}
-        scrollableTarget="scrollableDiv"
-      >
-        <Space>
-          <Button onClick={() => removePage(page.path)} key="back" > back </Button>
-          <Button onClick={() => removePage(page.path)} key="delete" > delete </Button>
-        </Space>
+//   return (
+//     <div
+//       key={createNewId()}
+//       id="scrollableDiv"
+//       style={{
+//         height: "100%",
+//         minWidth: 250,
+//         // overflow: "auto",
+//         padding: "0 16px",
+//         border: "1px solid rgba(140, 140, 140, 0.35)",
+//       }}
+//     >
+//       <InfiniteScroll
+//         dataLength={page.dirsAndFiles.length}
+//         next={loadMoreData}
+//         hasMore={false}
+//         loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
+//         endMessage={<Divider plain></Divider>}
+//         scrollableTarget="scrollableDiv"
+//       >
+//         <Space>
+//           <Button onClick={() => removePage(page.path)} key="back" > back </Button>
+//           <Button onClick={() => removePage(page.path)} key="delete" > delete </Button>
+//         </Space>
 
-        <List
-          dataSource={page.dirsAndFiles}
-          renderItem={(x) =>
-            x.kind === "file"
-            ?
-              <FileRow key={createNewId()} path={page.path} item={x} />
-            :
-              <DirRow key={createNewId()} path={page.path} item={x} />
-          }
-          size="large"
-        />
-      </InfiniteScroll>
-    </div>
-  );
-};
+//         <List
+//           dataSource={page.dirsAndFiles}
+//           renderItem={(x) =>
+//             x.kind === "file"
+//             ?
+//               <FileRow key={createNewId()} path={page.path} item={x} />
+//             :
+//               <DirRow key={createNewId()} path={page.path} item={x} />
+//           }
+//           size="large"
+//         />
+//       </InfiniteScroll>
+//     </div>
+//   );
+// };

@@ -4,11 +4,13 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 // eslint-disable-next-line
 import 'swiper/css/bundle';
+// import 'swiper/swiper-bundle.css';
 import RecipeReviewCard from '../Old/CardExample';
 import { $pages3 } from 'renderer/model/pagesStore';
 import { useStore } from 'effector-react';
 import { createNewId } from 'services/utils';
 import { FilePage } from '../FileList';
+import { buttonGroup } from '../Main';
 
 export const CarouselSwiper: FC = () => {
 	const pages = useStore($pages3);
@@ -18,18 +20,24 @@ export const CarouselSwiper: FC = () => {
 			style={{ height: '100%' }}
 			slidesPerView={3}
 			spaceBetween={90}
-			pagination={{
-				clickable: true
-			}}
+			// pagination={{
+			// 	clickable: true
+			// }}
+      preventClicks={false}
+      preventClicksPropagation={false}
+      preventInteractionOnTransition={false}
+      threshold={20}
 			modules={[ Pagination ]}
+
 		>
 
 
 			{pages.map((page) => (
-				<SwiperSlide key={createNewId()}>
+				<SwiperSlide  key={createNewId()}>
 					<FilePage page={page} />
 				</SwiperSlide>
 			))}
+      {buttonGroup}
 		</Swiper>
 	);
 };

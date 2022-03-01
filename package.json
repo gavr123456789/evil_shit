@@ -237,7 +237,6 @@
     "@emotion/styled": "^11.6.0",
     "@mui/icons-material": "^5.4.2",
     "@mui/material": "^5.4.2",
-    "antd": "^4.17.3",
     "chokidar": "^3.5.3",
     "effector": "^22.1.2",
     "effector-react": "^22.0.6",

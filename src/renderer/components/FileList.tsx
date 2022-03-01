@@ -1,4 +1,4 @@
-import { Card, CardActions, CardContent, CardMedia, IconButton, List } from '@mui/material';
+import { Card, CardActions, CardContent, CardMedia, IconButton, List, ToggleButton } from '@mui/material';
 import { FC, useState } from 'react';
 import { IDirRow, Page } from 'renderer/model/types';
 import { createNewId } from 'services/utils';
@@ -9,6 +9,8 @@ import { InfoPanel } from './InfoPanel';
 
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
 export interface PageProps2 {
 	page: Page;
 }
@@ -32,12 +34,16 @@ export const FilePage: FC<PageProps2> = ({ page }) => {
 			</CardContent>
 
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
+        <IconButton disableRipple={false} onClick={()=> {console.log("1");}} aria-label="add to favorites">
+          <FavoriteIcon onClick={()=> {console.log("2");}}/>
         </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
+        <IconButton>
+          <ShareIcon/>
         </IconButton>
+
+        <ToggleButton color="primary" value={2}>
+					<ArrowForwardIosIcon fontSize="small" />
+				</ToggleButton>
 
       </CardActions>
 

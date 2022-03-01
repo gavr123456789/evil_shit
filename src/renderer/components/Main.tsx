@@ -10,9 +10,9 @@ import MoveDownRoundedIcon from '@mui/icons-material/MoveDownRounded';
 import FileCopyRoundedIcon from '@mui/icons-material/FileCopyRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 
-const buttonGroup = (
+export const buttonGroup = (
 	<ButtonGroup variant="outlined" aria-label="outlined primary button group">
-		<IconButton>
+		<IconButton onClick={()=> {console.log("asas");}}>
 			<MoveDownRoundedIcon />
 		</IconButton>
 		<Button>
@@ -30,6 +30,7 @@ export const MainComponent: FC = () => {
   return (
     <>
       <CarouselSwiper  />
+      {buttonGroup}
     </>
 
 
