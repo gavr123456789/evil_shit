@@ -2,8 +2,12 @@ import { watch } from "chokidar";
 import { createNewSortInstance } from "fast-sort";
 import { stat } from "fs";
 import { basename, dirname, extname } from "path";
-import { addFile, addFileOld, deleteFile } from "renderer/model/pagesStore";
+import { addFile, deleteFile } from "renderer/model/pagesStore";
 import { DirOrFileRow } from "renderer/model/types";
+import { sas } from "./TreeSitter";
+
+console.log(sas);
+
 
 const naturalSort = createNewSortInstance({
   comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: "base" })
