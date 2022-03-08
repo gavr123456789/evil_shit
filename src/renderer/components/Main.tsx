@@ -1,14 +1,14 @@
 import { FC } from "react";
 import 'effector-logger/inspector';
 
-import { Button, ButtonGroup, IconButton, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { useStore } from "effector-react";
 import { $pages3 } from "renderer/model/pagesStore";
 
-import MoveDownRoundedIcon from '@mui/icons-material/MoveDownRounded';
-import FileCopyRoundedIcon from '@mui/icons-material/FileCopyRounded';
-import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
-import { FilePage } from "./FileList";
+// import MoveDownRoundedIcon from '@mui/icons-material/MoveDownRounded';
+// import FileCopyRoundedIcon from '@mui/icons-material/FileCopyRounded';
+// import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
+import { FilePage } from "./FilePage";
 
 // export const buttonGroup = (
 // 	<ButtonGroup variant="outlined" aria-label="outlined primary button group">
@@ -28,7 +28,12 @@ export const MainComponent: FC = () => {
   const pages = useStore($pages3);
 
   return (
-    <Stack direction={"row"}>
+    <Stack
+      direction="row"
+      justifyContent="flex-start"
+      alignItems="flex-start"
+      spacing={2}
+    >
       {pages.map((page) => (
 					<FilePage page={page} />
 			))}

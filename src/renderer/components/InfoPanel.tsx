@@ -55,7 +55,7 @@ export const InfoPanel: FC<{ open: boolean }> = ({ open }) => {
 					control={<Switch checked={checked} onChange={handleChange} />}
 					label="Show from target"
 				/> */}
-				<Slide direction="up" in={checked || open || true} container={containerRef.current}>
+				<Slide direction="up" in={checked || open } container={containerRef.current}>
 					{buttonGroup}
 				</Slide>
 			</Box>

@@ -2,15 +2,15 @@ import { ListItem, ToggleButton, ToggleButtonGroup, Typography } from '@mui/mate
 import { FC, useState } from 'react';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { IDirRow } from 'renderer/model/types';
-import { addPage } from 'renderer/model/pagesStore';
+import { addPage, removePage } from 'renderer/model/pagesStore';
 import { join } from 'path';
 
-export interface DirItemProps2 {
+export interface DirItemProps {
 	path: string;
 	item: IDirRow;
 }
 
-export const DirRow: FC<DirItemProps2> = (props) => {
+export const DirRow: FC<DirItemProps> = (props) => {
 	const [ activeBtns, setActiveBtns ] = useState<number[]>(() => []);
 
 	const { item, path } = props;
@@ -19,7 +19,10 @@ export const DirRow: FC<DirItemProps2> = (props) => {
 		setActiveBtns(newActiveBtns);
 		if (newActiveBtns.includes(2)) {
 			addPage(join(path, item.name));
-		}
+		} else if (newActiveBtns.length === 0) {
+			removePage(join(path, item.name));
+
+    }
 	};
 
 	return (

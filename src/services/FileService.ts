@@ -1,18 +1,15 @@
 import { watch } from "chokidar";
-import { createNewSortInstance } from "fast-sort";
+// import { createNewSortInstance } from "fast-sort";
 import { stat } from "fs";
 import { basename, dirname, extname } from "path";
 import { addFile, deleteFile } from "renderer/model/pagesStore";
 import { DirOrFileRow } from "renderer/model/types";
-import { sas } from "./TreeSitter";
-
-console.log(sas);
 
 
-const naturalSort = createNewSortInstance({
-  comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: "base" })
-    .compare,
-})
+// const naturalSort = createNewSortInstance({
+//   comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: "base" })
+//     .compare,
+// })
 
 // export const watchedDirs = new Set<string>()
 const DEFAULT_PATH = "/home/gavr/test"

@@ -3,12 +3,12 @@ import { Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 // eslint-disable-next-line
-import 'swiper/css/bundle';
+// import 'swiper/css/bundle';
 // import 'swiper/swiper-bundle.css';
 import { $pages3 } from 'renderer/model/pagesStore';
 import { useStore } from 'effector-react';
 import { createNewId } from 'services/utils';
-import { FilePage } from '../FileList';
+import { FilePage } from '../FilePage';
 
 export const CarouselSwiper: FC = () => {
 	const pages = useStore($pages3);
