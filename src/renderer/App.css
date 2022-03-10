@@ -4,83 +4,42 @@
  */
 
  /* не выделять текст нигде кроме инпутов */
-/* :not(input):not(textarea),
+:not(input):not(textarea),
 :not(input):not(textarea)::after,
 :not(input):not(textarea)::before {
     -webkit-user-select: none;
     user-select: none;
     cursor: default;
-} */
+}
 
 /* input, button, textarea, :focus {
-    outline: none;  // You should add some other style for :focus to help UX/a11y
+    outline: none;
 } */
 
 
 #root {
-  /* position: absolute;
+  position: absolute;
   top: 0;
-  left: 0; */
+  left: 0;
   height: 100%;
   width: 100%;
 }
 
+html {
+  height: 100%;
+}
 
-/* body {
-  position: relative;
-  color: white;
+
+body {
+  /* position: relative; */
   height: 100vh;
-  background: linear-gradient(
-    200.96deg,
-    #fedc2a -29.09%,
-    #dd5789 51.77%,
-    #7a2c9e 129.35%
-  );
-  font-family: sans-serif;
-  overflow-y: hidden;
-  display: flex;
+  min-height: 100%;
+  margin: 0%;
+  padding: 0;
+  box-sizing: border-box;
+  /* font-family: sans-serif;
+  overflow-y: hidden; */
+  /* display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
 }
-
-button {
-  background-color: white;
-  padding: 10px 20px;
-  border-radius: 10px;
-  border: none;
-  appearance: none;
-  font-size: 1.3rem;
-  box-shadow: 0px 8px 28px -6px rgba(24, 39, 75, 0.12),
-    0px 18px 88px -4px rgba(24, 39, 75, 0.14);
-  transition: all ease-in 0.1s;
-  cursor: pointer;
-  opacity: 0.9;
-}
-
-button:hover {
-  transform: scale(1.05);
-  opacity: 1;
-}
-
-li {
-  list-style: none;
-}
-
-a {
-  text-decoration: none;
-  height: fit-content;
-  width: fit-content;
-  margin: 10px;
-}
-
-a:hover {
-  opacity: 1;
-  text-decoration: none;
-}
-
-.Hello {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
-} */

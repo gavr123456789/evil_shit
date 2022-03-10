@@ -3,19 +3,19 @@ import { FC, useState } from 'react';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { IFileRow } from 'renderer/model/types';
 
-export interface FileItemProps2 {
+export interface FileItemProps {
 	path: string;
 	item: IFileRow;
 }
 
-export const FileRow: FC<FileItemProps2> = (props) => {
+export const FileRow: FC<FileItemProps> = (props) => {
 	const [ activeBtns, setActiveBtns ] = useState<number[]>(() => []);
 	const { item } = props;
 
 	const handleFormat = (_event: React.MouseEvent<HTMLElement>, newActiveBtns: number[]) => {
 		setActiveBtns(newActiveBtns);
     if (newActiveBtns.includes(1)) {
-      
+
 		}
 	};
 

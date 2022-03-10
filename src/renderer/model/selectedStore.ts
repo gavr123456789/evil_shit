@@ -1,18 +1,27 @@
 import { createStore, createEvent } from 'effector';
 import { DirOrFileRow } from 'renderer/model/types';
 
-export const $selected = createStore<Set<DirOrFileRow>>(new Set<DirOrFileRow>(), { name: 'counderStore' });
+export interface DirOrFileWithPath {
+	fullPath: string;
+	item: DirOrFileRow;
+}
 
-export const selectFile = createEvent<DirOrFileRow>('selectFile');
-export const unselectFile = createEvent<DirOrFileRow>('selectFile');
+export const $selected = createStore<Set<DirOrFileWithPath>>(new Set<DirOrFileWithPath>(), { name: 'counderStore' });
+
+export const selectFile = createEvent<DirOrFileWithPath>('selectFile');
+export const unselectFile = createEvent<DirOrFileWithPath>('selectFile');
 export const clearSelection = createEvent('selectFile');
 
 $selected
 	.on(selectFile, (state, value) => {
-		state.add(value);
+
+    state.add(value);
+    console.log("select done, store: ", state);
 	})
 	.on(unselectFile, (state, value) => {
 		state.delete(value);
+    console.log("unselect done store: ", state);
+
 	})
 	.on(clearSelection, (state) => {
 		state.clear();

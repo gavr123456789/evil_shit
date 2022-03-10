@@ -1,7 +1,7 @@
 import { FC } from "react";
 import 'effector-logger/inspector';
 
-import { Stack } from "@mui/material";
+import { Box, LinearProgress, Stack } from "@mui/material";
 import { useStore } from "effector-react";
 import { $pages3 } from "renderer/model/pagesStore";
 
@@ -9,6 +9,7 @@ import { $pages3 } from "renderer/model/pagesStore";
 // import FileCopyRoundedIcon from '@mui/icons-material/FileCopyRounded';
 // import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import { FilePage } from "./FilePage";
+import { $loadingPercent } from "../model/loadingStore";
 
 // export const buttonGroup = (
 // 	<ButtonGroup variant="outlined" aria-label="outlined primary button group">
@@ -26,17 +27,31 @@ import { FilePage } from "./FilePage";
 
 export const MainComponent: FC = () => {
   const pages = useStore($pages3);
+  const loading = useStore($loadingPercent)
 
   return (
     <Stack
-      direction="row"
-      justifyContent="flex-start"
-      alignItems="flex-start"
-      spacing={2}
+    direction="column"
+    // alignItems="stretch"
+    height={"100vh"}
     >
-      {pages.map((page) => (
-					<FilePage page={page} />
-			))}
+      <Stack
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="stretch"
+        spacing={2}
+        height={"100vh"}
+
+      >
+        {pages.map((page) => (
+            <FilePage page={page} />
+        ))}
+
+      </Stack>
+
+      <Box sx={{ width: '100%', MozBoxPack: "end" }}>
+        <LinearProgress variant="determinate" value={loading} />
+      </Box>
     </Stack>
 
 

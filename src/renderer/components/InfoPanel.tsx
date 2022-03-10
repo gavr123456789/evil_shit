@@ -1,43 +1,71 @@
 import * as React from 'react';
-import { Theme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Switch from '@mui/material/Switch';
-import Paper from '@mui/material/Paper';
 import Slide from '@mui/material/Slide';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { FC } from 'react';
-import { Button, ButtonGroup, IconButton } from '@mui/material';
+import { FC, useCallback } from 'react';
+import { Button, ButtonGroup } from '@mui/material';
 
-import MoveDownRoundedIcon from '@mui/icons-material/MoveDownRounded';
-import FileCopyRoundedIcon from '@mui/icons-material/FileCopyRounded';
-import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
-const buttonGroup = (
-	<ButtonGroup variant="outlined" aria-label="outlined primary button group">
-		<IconButton>
-			<MoveDownRoundedIcon />
-		</IconButton>
-		<Button>
-			<FileCopyRoundedIcon />
-		</Button>
-		<Button>
-			<DeleteRoundedIcon />
-		</Button>
-	</ButtonGroup>
-);
+// import ContentCut from '@mui/icons-material/ContentCut';
+import ContentCopy from '@mui/icons-material/ContentCopy';
+import ContentPaste from '@mui/icons-material/ContentPaste';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useStore } from 'effector-react';
+import { $selected } from '../model/selectedStore';
+import { rm } from 'fs/promises';
+import cpy from 'cpy';
+import { setLoading } from '../model/loadingStore';
 
 export const InfoPanel: FC<{ open: boolean }> = ({ open }) => {
 	const [ checked, setChecked ] = React.useState(false);
 	const containerRef = React.useRef(null);
+	const selected = useStore($selected);
 
-	const handleChange = () => {
-		setChecked((prev) => !prev);
+	// const handleChange = () => {
+	// 	setChecked((prev) => !prev);
+	// };
+
+	const handleDelete = () => {
+		selected.forEach(async (x) => {
+			switch (x.item.kind) {
+				case 'dir':
+					console.log('deleting dir ', x.item.name);
+
+					try {
+						await rm(x.fullPath, { recursive: true });
+						console.log('successfully deleted ', x.item.name);
+					} catch (error: any) {
+						console.error('there was an error:', error.message);
+					}
+
+					break;
+
+				case 'file':
+					console.log('deleting file ', x.item.name);
+
+					try {
+						await rm(x.fullPath);
+						console.log('successfully deleted ', x.item.name);
+					} catch (error: any) {
+						console.error('there was an error:', error.message);
+					}
+					break;
+			}
+		});
 	};
+
+	const handleCopy = useCallback(async () => {
+		selected.forEach(async (x) => {
+			await cpy(x.fullPath, 'gavr/home/copys', { overwrite: true }).on('progress', (progress) => {
+				setLoading(progress.percent * 1000);
+			});
+		});
+	}, []);
 
 	return (
 		<Box
 			sx={{
-				// height: 180,
+				height: open ? 'auto' : 0,
 				width: 200,
+
 				display: 'flex',
 				// paddingTop: 2,
 				// paddingRigth: 2,
@@ -55,8 +83,18 @@ export const InfoPanel: FC<{ open: boolean }> = ({ open }) => {
 					control={<Switch checked={checked} onChange={handleChange} />}
 					label="Show from target"
 				/> */}
-				<Slide direction="up" in={checked || open } container={containerRef.current}>
-					{buttonGroup}
+				<Slide direction="up" in={checked || open} container={containerRef.current}>
+					<ButtonGroup variant="outlined">
+						<Button onClick={handleDelete}>
+							<DeleteIcon />
+						</Button>
+						<Button onClick={handleCopy}>
+							<ContentCopy />
+						</Button>
+						<Button>
+							<ContentPaste />
+						</Button>
+					</ButtonGroup>
 				</Slide>
 			</Box>
 		</Box>

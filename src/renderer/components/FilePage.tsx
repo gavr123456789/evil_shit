@@ -19,7 +19,7 @@ export const FilePage: FC<PageProps> = ({ page }) => {
 	const [ infoPanelOpened, setOpenInfoPanel ] = useState(false);
 
 	return (
-		<Card sx={{ width: 200, height: "100%" }}>
+		<Card sx={{ width: 200, height: "fit-content" }} >
 			<CardContent>
 				<List dense>
 					{page.dirsAndFiles.map(
@@ -34,16 +34,9 @@ export const FilePage: FC<PageProps> = ({ page }) => {
 			</CardContent>
 
       <CardActions disableSpacing>
-        <IconButton disableRipple={false} onClick={()=> {setOpenInfoPanel(!infoPanelOpened)}} aria-label="add to favorites">
-          <FavoriteIcon />
+        <IconButton  onClick={()=> {setOpenInfoPanel(!infoPanelOpened)}} >
+          <ArrowForwardIosIcon fontSize="small" />
         </IconButton>
-        <IconButton>
-          <ShareIcon/>
-        </IconButton>
-
-        <ToggleButton color="primary" value={2}>
-					<ArrowForwardIosIcon fontSize="small" />
-				</ToggleButton>
 
       </CardActions>
 
