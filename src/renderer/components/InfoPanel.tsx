@@ -1,7 +1,6 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Slide from '@mui/material/Slide';
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useRef } from 'react';
 import { Button, ButtonGroup } from '@mui/material';
 
 // import ContentCut from '@mui/icons-material/ContentCut';
@@ -15,13 +14,8 @@ import cpy from 'cpy';
 import { setLoading } from '../model/loadingStore';
 
 export const InfoPanel: FC<{ open: boolean }> = ({ open }) => {
-	const [ checked, setChecked ] = React.useState(false);
-	const containerRef = React.useRef(null);
+	const containerRef = useRef(null);
 	const selected = useStore($selected);
-
-	// const handleChange = () => {
-	// 	setChecked((prev) => !prev);
-	// };
 
 	const handleDelete = () => {
 		selected.forEach(async (x) => {
@@ -54,7 +48,7 @@ export const InfoPanel: FC<{ open: boolean }> = ({ open }) => {
 
 	const handleCopy = useCallback(async () => {
 		selected.forEach(async (x) => {
-			await cpy(x.fullPath, 'gavr/home/copys', { overwrite: true }).on('progress', (progress) => {
+			await cpy(x.fullPath, 'gavr/home/lastPageSelectedPath', { overwrite: true }).on('progress', (progress) => {
 				setLoading(progress.percent * 1000);
 			});
 		});
@@ -67,9 +61,7 @@ export const InfoPanel: FC<{ open: boolean }> = ({ open }) => {
 				width: 200,
 
 				display: 'flex',
-				// paddingTop: 2,
-				// paddingRigth: 2,
-				// paddingLeft: 2,
+
 				padding: 2,
 				borderRadius: 1,
 				// bgcolor: (theme) =>
@@ -79,11 +71,8 @@ export const InfoPanel: FC<{ open: boolean }> = ({ open }) => {
 			ref={containerRef}
 		>
 			<Box sx={{ width: 200 }}>
-				{/* <FormControlLabel
-					control={<Switch checked={checked} onChange={handleChange} />}
-					label="Show from target"
-				/> */}
-				<Slide direction="up" in={checked || open} container={containerRef.current}>
+				<Slide direction="up" in={ open } container={containerRef.current}>
+
 					<ButtonGroup variant="outlined">
 						<Button onClick={handleDelete}>
 							<DeleteIcon />
@@ -95,6 +84,7 @@ export const InfoPanel: FC<{ open: boolean }> = ({ open }) => {
 							<ContentPaste />
 						</Button>
 					</ButtonGroup>
+
 				</Slide>
 			</Box>
 		</Box>

@@ -14,7 +14,6 @@ export const clearSelection = createEvent('selectFile');
 
 $selected
 	.on(selectFile, (state, value) => {
-
     state.add(value);
     console.log("select done, store: ", state);
 	})

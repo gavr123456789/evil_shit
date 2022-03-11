@@ -4,12 +4,12 @@ export interface IFileRow {
   kind: "file";
   name: string;
   ext: string;
-  item: Stats;
+  stats?: Stats;
 }
 export interface IDirRow {
   kind: "dir";
   name: string;
-  item: Stats;
+  stats?: Stats;
 }
 
 export type DirOrFileRow = IDirRow | IFileRow;
@@ -23,4 +23,6 @@ export interface FileOrDirAddEventData {
 export interface Page {
   path: string;
   dirsAndFiles: DirOrFileRow[];
+  selected: boolean;
+  lastSelected?: Page
 }

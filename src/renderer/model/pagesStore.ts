@@ -5,7 +5,10 @@ import {
   globalCatcheDirs,
   globalCatcheFiles,
 } from "services/FileService";
+import { selectPage } from "./lastSelectedPage";
 import { Page } from "./types";
+
+const DEFAULT_PATH = "/home/gavr/test"
 
 // sort funcs
 const naturalSort = createNewSortInstance({
@@ -16,12 +19,15 @@ const naturalSort = createNewSortInstance({
 export const $pages3 = createStore<Page[]>(
   [
     {
-      path: "/home/gavr/test",
+      path: DEFAULT_PATH,
       dirsAndFiles: [],
-    },
+      selected: false
+    }
   ],
   { name: "pages3" }
 );
+
+
 
 export interface EventBaseNameAndPath {
   baseName: string;
@@ -55,19 +61,22 @@ $pages3
     const newPage: Page = {
       dirsAndFiles: [],
       path: path,
+      selected: true
     };
 
-    // Если в кеше есть, значит на эту страницу уже заходили и нужно только взять данные
+
     const globalDirs = globalCatcheDirs.get(path);
     const globalFiles = globalCatcheFiles.get(path);
 
+    // if this path in cache thenm take data from it Если в кеше есть, значит на эту страницу уже заходили и нужно только взять данные
     if (globalDirs || globalFiles) {
       newPage.dirsAndFiles = [...globalDirs ?? [], ...globalFiles ?? []];
     } else {
+      // otherwise add to watching
       addPathToWatch(path);
     }
 
-    // Иначе добавить путь к наблюдаемым
+    selectPage(newPage)
 
     return [...state, newPage];
   })

@@ -18,6 +18,7 @@ const watcher = watch(DEFAULT_PATH, {
   ignored: /[\/\\]\./,
   persistent: true,
   depth: 0,
+  // ignoreInitial: true
 });
 
 // TODO Держать в коллекциях флаг отсортирована она или нет
@@ -34,11 +35,11 @@ export function startWatch() {
   watcher
     .on("add", function (newPath) {
 
-      stat(newPath, (err, stats) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
+      // stat(newPath, (err, stats) => {
+        // if (err) {
+        //   console.error(err);
+        //   return;
+        // }
 
         const dirWhereFileAdded = dirname(newPath)
         let globalFilesArray = globalCatcheFiles.get(dirWhereFileAdded)
@@ -52,17 +53,17 @@ export function startWatch() {
           kind: "file",
           name: basename(newPath),
           ext: extname(newPath),
-          item: stats
+          // stats: stats
         })
 
         addFile(dirWhereFileAdded)
 
-      });
+      // });
     })
     .on("addDir", function (newPath) {
 
-      stat(newPath, (err, stats) => {
-        if (err) { console.error(err); return; }
+      // stat(newPath, (err, stats) => {
+        // if (err) { console.error(err); return; }
 
         const dirWhereDirAdded = dirname(newPath)
         let globalDirs = globalCatcheDirs.get(dirWhereDirAdded)
@@ -75,7 +76,7 @@ export function startWatch() {
         globalDirs.push({
           kind: "dir",
           name: basename(newPath),
-          item: stats
+          // stats: stats
         })
 
         console.log("Dir was added", newPath);
@@ -83,7 +84,7 @@ export function startWatch() {
 
         addFile(dirWhereDirAdded)
 
-      });
+      // });
     })
     .on("change", function (path) {
       console.log("File", path, "has been changed");

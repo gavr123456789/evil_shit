@@ -1,13 +1,14 @@
 import { ListItem, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { FC, useCallback, useState } from 'react';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { IDirRow } from 'renderer/model/types';
+import { IDirRow, Page } from 'renderer/model/types';
 import { addPage, removePage } from 'renderer/model/pagesStore';
 import { join } from 'path';
 import { selectFile, unselectFile } from '../model/selectedStore';
+import { selectPage } from '../model/lastSelectedPage';
 
 export interface DirItemProps {
-	path: string;
+	page: Page;
 	item: IDirRow;
 }
 
@@ -15,7 +16,8 @@ export interface DirItemProps {
 export const DirRow: FC<DirItemProps> = (props) => {
 	const [ activeBtns, setActiveBtns ] = useState<number[]>(() => []);
 
-	const { item, path } = props;
+	const { item, page } = props;
+  const { path } = page
 
 	const handleSelect = useCallback( (_event: React.MouseEvent<HTMLElement>, newActiveBtns: number[]) => {
 		const fullPath = join(path, item.name)
@@ -35,6 +37,9 @@ export const DirRow: FC<DirItemProps> = (props) => {
       else if (activeBtns.includes(2)) {
         // close folder
         console.log("close folder");
+        if (!page.selected) {
+          selectPage(page)
+        }
         removePage(fullPath);
       }
 
