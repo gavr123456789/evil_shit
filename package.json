@@ -249,6 +249,7 @@
     "os": "^0.1.2",
     "path": "^0.12.7",
     "react": "^17.0.2",
+    "react-custom-scrollbars-2": "^4.4.0",
     "react-dom": "^17.0.2",
     "react-infinite-scroll-component": "^6.1.0",
     "react-router-dom": "^5.3.0",

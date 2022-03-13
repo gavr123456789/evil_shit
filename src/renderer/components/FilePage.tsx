@@ -8,6 +8,7 @@ import { InfoPanel } from './InfoPanel';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Loading } from './Loading';
 import { selectPage } from '../model/lastSelectedPage';
+import Scrollbars from 'react-custom-scrollbars-2';
 
 export interface PageProps {
 	page: Page;
@@ -25,7 +26,17 @@ export const FilePage: FC<PageProps> = ({ page }) => {
 	return (
 		<Card sx={{ width: 200, height: 'fit-content' }}>
 			<CardContent onClick={handleSelect}>
-				<List dense onClick={handleSelect}>
+				<Scrollbars
+					// This will activate auto hide
+					autoHide
+					// Hide delay in ms
+					autoHideTimeout={1000}
+					// Duration for hide animation in ms.
+					autoHideDuration={200}
+					autoHeight
+					autoHeightMin={100}
+					autoHeightMax={520}
+				>
 					{page.dirsAndFiles.map(
 						(x) =>
 							x.kind === 'file' ? (
@@ -34,7 +45,7 @@ export const FilePage: FC<PageProps> = ({ page }) => {
 								<DirRow key={x.name} page={page} item={x} />
 							)
 					)}
-				</List>
+				</Scrollbars>
 			</CardContent>
 
 			<CardActions disableSpacing>
