@@ -43,7 +43,7 @@ export const FileRow: FC<FileItemProps> = (props) => {
 
 	return (
 		// <ListItem disableGutters >
-			<ToggleButtonGroup sx={{ flexGrow: 1 }} value={activeBtns} onChange={handleSelect} size="small">
+			<ToggleButtonGroup sx={{ flexGrow: 1, minHeight: "10px" }} value={activeBtns} onChange={handleSelect} size="small">
 
 				<ToggleButton color="primary" sx={{ flexGrow: 1 }} value={1}>
 

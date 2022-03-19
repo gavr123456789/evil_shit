@@ -1,4 +1,4 @@
-import { Box, Card, CardActions, CardContent, CardMedia, IconButton, LinearProgress, List } from '@mui/material';
+import { Box, Card, CardActions, CardContent, CardMedia, IconButton, LinearProgress, List, Stack } from '@mui/material';
 import { FC, useCallback, useState } from 'react';
 import { Page } from 'renderer/model/types';
 import { DirRow } from './DirRow';
@@ -8,11 +8,12 @@ import { InfoPanel } from './InfoPanel';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Loading } from './Loading';
 import { selectPage } from '../model/lastSelectedPage';
-import Scrollbars from 'react-custom-scrollbars-2';
+import SwiperCore, { Virtual, Navigation, Pagination, Scrollbar, Mousewheel, FreeMode, Keyboard } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 export interface PageProps {
 	page: Page;
-  itemId: number
+	// itemId: number
 }
 
 export const FilePage: FC<PageProps> = ({ page }) => {
@@ -25,45 +26,65 @@ export const FilePage: FC<PageProps> = ({ page }) => {
 	}, []);
 
 	return (
-		<Card sx={{ width: 200, height: 'fit-content', m: 2}}>
-			<CardContent onClick={handleSelect}>
-				<Scrollbars
-					// This will activate auto hide
-					autoHide
-					// Hide delay in ms
-					autoHideTimeout={1000}
-					// Duration for hide animation in ms.
-					autoHideDuration={200}
-					autoHeight
-					autoHeightMin={100}
-					autoHeightMax={520}
-				>
-					{page.dirsAndFiles.map(
-						(x) =>
-							x.kind === 'file' ? (
-								<FileRow key={x.name} page={page} item={x} />
-							) : (
-								<DirRow key={x.name} page={page} item={x} />
-							)
-					)}
-				</Scrollbars>
-			</CardContent>
+		<SwiperSlide
+			style={{
+				margin: 10,
+				marginBlock: '10px'
+			}}
+		>
+			{/* <Card sx={{ width: 200, minHeight: 400, m: 2 }}>
+				<CardContent onClick={handleSelect}> */}
+					<Swiper
+						wrapperTag="div"
+						direction={'vertical'}
+						mousewheel={true}
+						freeMode={true}
+						// spaceBetween={5}
+						modules={[ Scrollbar, Mousewheel, FreeMode, Keyboard ]}
+						slidesPerView={10}
+						virtual={{
+							addSlidesBefore: 10,
+							addSlidesAfter: 10
+						}}
+						scrollbar={{
+							hide: true,
+							draggable: true
+						}}
+					>
+						{page.dirsAndFiles.map(
+							(x, i) =>
+								x.kind === 'file' ? (
+									<SwiperSlide key={x.name} virtualIndex={i}>
+										<FileRow page={page} item={x} />
+									</SwiperSlide>
+								) : (
+									<SwiperSlide key={x.name} virtualIndex={i}>
+										<DirRow page={page} item={x} />
+									</SwiperSlide>
+								)
+						)}
+					</Swiper>
 
-			<CardActions disableSpacing>
-				<IconButton
-					onClick={() => {
-						setOpenInfoPanel(!infoPanelOpened);
-					}}
-				>
-					<ArrowForwardIosIcon fontSize="small" />
-				</IconButton>
-			</CardActions>
+				{/* </CardContent>
 
-			<CardMedia>
-				<InfoPanel open={infoPanelOpened} />
+				<CardActions disableSpacing>
+					<IconButton
+						onClick={() => {
+							setOpenInfoPanel(!infoPanelOpened);
+						}}
+					>
+						<ArrowForwardIosIcon fontSize="small" />
+					</IconButton>
+				</CardActions>
 
-				<Loading open={page.selected} />
-			</CardMedia>
-		</Card>
+				<CardMedia>
+					<InfoPanel open={infoPanelOpened} />
+
+					<Loading open={page.selected} />
+				</CardMedia>
+			</Card> */}
+		</SwiperSlide>
 	);
 };
+
+FilePage.displayName = 'SwiperSlide';

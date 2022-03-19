@@ -18,7 +18,7 @@ import { DirRow } from './DirRow';
 import SwiperCore, { Virtual, Navigation, Pagination, Scrollbar, Mousewheel, FreeMode, Keyboard } from 'swiper';
 
 import 'swiper/css';
-import 'swiper/css/pagination';
+// import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
 SwiperCore.use([ Virtual, Keyboard ]);
@@ -39,63 +39,21 @@ export const MainComponent: FC = () => {
 	return (
 		<Stack direction="column" alignItems="stretch" height={'100vh'}>
 			<Swiper
-				className="swiper-h"
 				spaceBetween={50}
 				scrollbar={{
 					hide: true
 				}}
-				// mousewheel={true}
 				slidesPerView={3}
 				modules={[ Scrollbar ]}
-				// pagination={{
-				// 	type: 'progressbar'
-				// }}
 			>
-				{pages.map((page, i) => (
-					<SwiperSlide>
-						<Swiper
-							className="mySwiper2 swiper-v"
-							direction={'vertical'}
-							mousewheel={true}
-							freeMode={true}
-							// spaceBetween={1}
-							modules={[ Scrollbar, Mousewheel, FreeMode, Keyboard ]}
-							slidesPerView={10}
-							virtual={{
-								addSlidesBefore: 10,
-								addSlidesAfter: 10
-							}}
-							hashNavigation={{
-								watchState: true
-							}}
-							// pagination={{
-							// 	type: 'progressbar'
-							// }}
-							scrollbar={{
-								hide: true,
-								draggable: true
-							}}
-							keyboard={{
-								enabled: true
-							}}
-						>
-							{/* {page.dirsAndFiles.map(dirOrFile => <SwiperSlide>{dirOrFile.name}</SwiperSlide>)} */}
+				{pages.map((page) => (
 
-							{page.dirsAndFiles.map(
-								(x, i) =>
-									x.kind === 'file' ? (
-										<SwiperSlide data-hash={x.name} key={x.name} virtualIndex={i}>
-											<FileRow key={x.name} page={page} item={x} />
-										</SwiperSlide>
-									) : (
-										<SwiperSlide data-hash={x.name} key={x.name} virtualIndex={i}>
-											<DirRow key={x.name} page={page} item={x} />
-										</SwiperSlide>
-									)
-							)}
-						</Swiper>
-					</SwiperSlide>
+
+						<FilePage page={page} />
+
 				))}
+
+
 				<SwiperSlide>Horizontal Slide 1</SwiperSlide>
 				<SwiperSlide>
 					<Swiper
@@ -115,8 +73,10 @@ export const MainComponent: FC = () => {
 						<SwiperSlide>Vertical Slide 5</SwiperSlide>
 					</Swiper>
 				</SwiperSlide>
-				<SwiperSlide>Horizontal Slide 3</SwiperSlide>
-				<SwiperSlide>Horizontal Slide 4</SwiperSlide>
+				<SwiperSlide>Horizontal Slide 1</SwiperSlide>
+				<SwiperSlide>Horizontal Slide 1</SwiperSlide>
+				<SwiperSlide>Horizontal Slide 1</SwiperSlide>
+
 			</Swiper>
 			{/* <Stack direction={"row"} >
             {pages.map((page, i) => <FilePage itemId={i} page={page} />)}
