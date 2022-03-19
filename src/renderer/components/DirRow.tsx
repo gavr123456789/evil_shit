@@ -50,7 +50,7 @@ export const DirRow: FC<DirItemProps> = (props) => {
 
 
 	return (
-		<ListItem disableGutters >
+		// <ListItem disableGutters >
 			<ToggleButtonGroup sx={{ flexGrow: 1 }} value={activeBtns} onChange={handleSelect} size="small">
 
         <ToggleButton color="primary"  sx={{ flexGrow: 1 }} value={1}>
@@ -62,6 +62,6 @@ export const DirRow: FC<DirItemProps> = (props) => {
 				</ToggleButton>
 
 			</ToggleButtonGroup>
-		</ListItem>
+		// </ListItem>
 	);
 };

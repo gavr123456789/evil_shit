@@ -12,6 +12,7 @@ import Scrollbars from 'react-custom-scrollbars-2';
 
 export interface PageProps {
 	page: Page;
+  itemId: number
 }
 
 export const FilePage: FC<PageProps> = ({ page }) => {
@@ -24,7 +25,7 @@ export const FilePage: FC<PageProps> = ({ page }) => {
 	}, []);
 
 	return (
-		<Card sx={{ width: 200, height: 'fit-content' }}>
+		<Card sx={{ width: 200, height: 'fit-content', m: 2}}>
 			<CardContent onClick={handleSelect}>
 				<Scrollbars
 					// This will activate auto hide

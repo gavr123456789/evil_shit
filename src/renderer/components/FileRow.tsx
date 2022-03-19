@@ -1,9 +1,10 @@
-import { ListItem, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { ListItem, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { FC, useCallback, useState } from 'react';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { IFileRow, Page } from 'renderer/model/types';
 import { selectFile, unselectFile } from '../model/selectedStore';
 import { join } from 'path';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 export interface FileItemProps {
 	item: IFileRow;
@@ -41,16 +42,22 @@ export const FileRow: FC<FileItemProps> = (props) => {
 	}, [setActiveBtns, activeBtns]);
 
 	return (
-		<ListItem disableGutters >
+		// <ListItem disableGutters >
 			<ToggleButtonGroup sx={{ flexGrow: 1 }} value={activeBtns} onChange={handleSelect} size="small">
+
 				<ToggleButton color="primary" sx={{ flexGrow: 1 }} value={1}>
-					{item.name}
+
+          <Stack direction={"row"} flexWrap={"nowrap"} flexGrow={1} gap={1}>
+            <InsertDriveFileIcon />
+            {item.name}
+          </Stack>
+
 				</ToggleButton>
 
 				<ToggleButton color="primary" value={2}>
 					<ArrowForwardIosIcon fontSize="small" />
 				</ToggleButton>
 			</ToggleButtonGroup>
-		</ListItem>
+		// </ListItem>
 	);
 };

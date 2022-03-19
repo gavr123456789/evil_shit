@@ -3,6 +3,33 @@
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
 
+
+
+ .swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  background: #fff;
+
+
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+
+}
+
+/* .swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+} */
+
+
+
  /* не выделять текст нигде кроме инпутов */
 :not(input):not(textarea),
 :not(input):not(textarea)::after,
