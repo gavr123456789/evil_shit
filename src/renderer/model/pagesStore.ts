@@ -97,7 +97,7 @@ $pages3
     const sortedDirs = naturalSort(dirsArray ?? []).asc();
     const sortedFiles = naturalSort(filesArray ?? []).asc();
 
-    console.log("__sortedDirs = ", sortedDirs);
+    console.log("page.dirsAndFiles = ", page.dirsAndFiles);
 
     // Положить в соответстующую page
     page.dirsAndFiles = [...sortedDirs, ...sortedFiles];

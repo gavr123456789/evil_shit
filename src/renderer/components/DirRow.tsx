@@ -1,4 +1,4 @@
-import { ListItem, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { ListItem, Stack, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { FC, useCallback, useState } from 'react';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { IDirRow, Page } from 'renderer/model/types';
@@ -13,11 +13,13 @@ export interface DirItemProps {
 	item: IDirRow;
 }
 
+
 export const DirRow: FC<DirItemProps> = (props) => {
 	const [ activeBtns, setActiveBtns ] = useState<number[]>(() => []);
 
 	const { item, page } = props;
 	const { path } = page;
+
 
 	const handleSelect = useCallback(
 		(_event: React.MouseEvent<HTMLElement>, newActiveBtns: number[]) => {
@@ -56,17 +58,26 @@ export const DirRow: FC<DirItemProps> = (props) => {
 			onChange={handleSelect}
 			size="small"
 		>
-			<ToggleButton color="primary" sx={{ flexGrow: 1 }} value={1}>
-				<Stack direction={'row'} flexWrap={'nowrap'} flexGrow={1} gap={1}>
-					<FolderIcon />
-					{item.name}
-				</Stack>
+			<ToggleButton
+				color="primary"
+				sx={{
+					flexGrow: 1,
+					gap: 1,
+					display: 'flex',
+					justifyContent: 'flex-start',
+				}}
+				value={1}
+			>
+
+				<FolderIcon />
+				<Typography variant='caption' maxWidth={"80px"} noWrap>{item.name}</Typography>
+
 			</ToggleButton>
 
 			<ToggleButton color="primary" value={2}>
 				<ArrowForwardIosIcon fontSize="small" />
 			</ToggleButton>
 		</ToggleButtonGroup>
-		// </ListItem>
+
 	);
 };

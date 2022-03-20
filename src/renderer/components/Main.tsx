@@ -59,12 +59,13 @@ export const MainComponent: FC = () => {
 					<Swiper
 						className="mySwiper2 swiper-v"
 						direction={'vertical'}
+						slidesPerView={10}
+
 						spaceBetween={50}
 						pagination={{
 							clickable: true
 						}}
 						modules={[ Pagination ]}
-						slidesPerView={10}
 					>
 						<SwiperSlide>Vertical Slide 1</SwiperSlide>
 						<SwiperSlide>Vertical Slide 2</SwiperSlide>
@@ -88,12 +89,5 @@ export const MainComponent: FC = () => {
 			</Box>
 		</Stack>
 
-		// <Space direction="horizontal" style={{ margin: 6 }}>
-		//   {/* {pages.map((page) => (
-		//     <FilePage key={createNewId()} page={page} />
-		//   ))} */}
-		//   {/* <SimpleAccordion /> */}
-		//   {/* <EffectorTest /> */}
-		// </Space>
 	);
 };

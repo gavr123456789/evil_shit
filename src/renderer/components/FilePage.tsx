@@ -15,6 +15,7 @@ export interface PageProps {
 	page: Page;
 	// itemId: number
 }
+SwiperCore.use([Virtual, Navigation, Pagination]);
 
 export const FilePage: FC<PageProps> = ({ page }) => {
 	const [ infoPanelOpened, setOpenInfoPanel ] = useState(false);
@@ -27,45 +28,47 @@ export const FilePage: FC<PageProps> = ({ page }) => {
 
 	return (
 		<SwiperSlide
-			style={{
-				margin: 10,
-				marginBlock: '10px'
-			}}
+			// style={{
+			// 	margin: 10,
+			// 	marginBlock: '10px'
+			// }}
 		>
-			{/* <Card sx={{ width: 200, minHeight: 400, m: 2 }}>
-				<CardContent onClick={handleSelect}> */}
+			<Card sx={{ width: 200, m: 2 }}>
+				<CardContent onClick={handleSelect}>
 					<Swiper
 						wrapperTag="div"
+						slidesPerView={"auto"}
 						direction={'vertical'}
 						mousewheel={true}
 						freeMode={true}
 						// spaceBetween={5}
-						modules={[ Scrollbar, Mousewheel, FreeMode, Keyboard ]}
-						slidesPerView={10}
-						virtual={{
-							addSlidesBefore: 10,
-							addSlidesAfter: 10
-						}}
+						modules={[Pagination, Scrollbar, Mousewheel, FreeMode ]}
+						// virtual={{
+						// 	addSlidesBefore: 10,
+						// 	addSlidesAfter: 10
+						// }}
 						scrollbar={{
 							hide: true,
 							draggable: true
 						}}
+            onClick={() => {console.log("sa!!");
+            }}
 					>
 						{page.dirsAndFiles.map(
 							(x, i) =>
 								x.kind === 'file' ? (
-									<SwiperSlide key={x.name} virtualIndex={i}>
+									<SwiperSlide style={{height: "50px"}} key={x.name} virtualIndex={i}>
 										<FileRow page={page} item={x} />
 									</SwiperSlide>
 								) : (
-									<SwiperSlide key={x.name} virtualIndex={i}>
+									<SwiperSlide style={{height: "50px"}} key={x.name} virtualIndex={i}>
 										<DirRow page={page} item={x} />
 									</SwiperSlide>
 								)
 						)}
 					</Swiper>
 
-				{/* </CardContent>
+				</CardContent>
 
 				<CardActions disableSpacing>
 					<IconButton
@@ -82,7 +85,7 @@ export const FilePage: FC<PageProps> = ({ page }) => {
 
 					<Loading open={page.selected} />
 				</CardMedia>
-			</Card> */}
+			</Card>
 		</SwiperSlide>
 	);
 };

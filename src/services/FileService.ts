@@ -4,7 +4,7 @@ import { stat } from "fs";
 import { basename, dirname, extname } from "path";
 import { addFile, deleteFile } from "renderer/model/pagesStore";
 import { DirOrFileRow } from "renderer/model/types";
-
+import { homedir } from "os";
 
 // const naturalSort = createNewSortInstance({
 //   comparer: new Intl.Collator(undefined, { numeric: true, sensitivity: "base" })
