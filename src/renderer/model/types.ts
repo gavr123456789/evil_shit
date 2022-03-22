@@ -1,28 +1,27 @@
-import { Stats } from "fs";
+import { Stats } from 'fs';
 
-export interface IFileRow {
-  kind: "file";
-  name: string;
-  ext: string;
-  stats?: Stats;
+export interface IFile {
+	name: string;
+	stats?: Stats;
 }
-export interface IDirRow {
-  kind: "dir";
-  name: string;
-  stats?: Stats;
+export interface IFileRow extends IFile {
+	kind: 'file';
+	ext: string;
+}
+export interface IDirRow extends IFile {
+	kind: 'dir';
 }
 
 export type DirOrFileRow = IDirRow | IFileRow;
 
 export interface FileOrDirAddEventData {
-  path: string;
-  dirOrFile: DirOrFileRow;
+	path: string;
+	dirOrFile: DirOrFileRow;
 }
 
-
 export interface Page {
-  path: string;
-  dirsAndFiles: DirOrFileRow[];
-  selected: boolean;
-  lastSelected?: Page
+	path: string;
+	dirsAndFiles: DirOrFileRow[];
+	selected: boolean;
+	lastSelected?: Page;
 }

@@ -64,8 +64,6 @@ export const InfoPanel: FC<{ open: boolean }> = ({ open }) => {
 
 				padding: 2,
 				borderRadius: 1,
-				// bgcolor: (theme) =>
-				//   theme.palette.mode === 'light' ? 'grey.100' : 'grey.900',
 				overflow: 'hidden'
 			}}
 			ref={containerRef}

@@ -15,34 +15,29 @@ export interface PageProps {
 	page: Page;
 	// itemId: number
 }
-SwiperCore.use([Virtual, Navigation, Pagination]);
+SwiperCore.use([ Virtual, Navigation, Pagination ]);
 
 export const FilePage: FC<PageProps> = ({ page }) => {
 	const [ infoPanelOpened, setOpenInfoPanel ] = useState(false);
 
 	const handleSelect = useCallback((e: React.MouseEvent<HTMLDivElement | HTMLUListElement, MouseEvent>) => {
-		console.log('e.target = ', e.target, ' e.currentTarget = ', e.currentTarget);
+		// console.log('e.target = ', e.target, ' e.currentTarget = ', e.currentTarget);
 		if (e.target !== e.currentTarget) return;
 		selectPage(page);
 	}, []);
 
 	return (
-		<SwiperSlide
-			// style={{
-			// 	margin: 10,
-			// 	marginBlock: '10px'
-			// }}
-		>
-			<Card sx={{ width: 200, m: 2 }}>
+		<SwiperSlide style={{ width: 200 }}>
+			<Card>
 				<CardContent onClick={handleSelect}>
 					<Swiper
 						wrapperTag="div"
-						slidesPerView={"auto"}
+						slidesPerView={'auto'}
 						direction={'vertical'}
 						mousewheel={true}
 						freeMode={true}
-						// spaceBetween={5}
-						modules={[Pagination, Scrollbar, Mousewheel, FreeMode ]}
+						spaceBetween={1}
+						modules={[ Pagination, Scrollbar, Mousewheel, FreeMode ]}
 						// virtual={{
 						// 	addSlidesBefore: 10,
 						// 	addSlidesAfter: 10
@@ -51,23 +46,20 @@ export const FilePage: FC<PageProps> = ({ page }) => {
 							hide: true,
 							draggable: true
 						}}
-            onClick={() => {console.log("sa!!");
-            }}
 					>
 						{page.dirsAndFiles.map(
 							(x, i) =>
 								x.kind === 'file' ? (
-									<SwiperSlide style={{height: "50px"}} key={x.name} virtualIndex={i}>
+									<SwiperSlide style={{ height: '50px' }} key={x.name} virtualIndex={i}>
 										<FileRow page={page} item={x} />
 									</SwiperSlide>
 								) : (
-									<SwiperSlide style={{height: "50px"}} key={x.name} virtualIndex={i}>
+									<SwiperSlide style={{ height: '50px' }} key={x.name} virtualIndex={i}>
 										<DirRow page={page} item={x} />
 									</SwiperSlide>
 								)
 						)}
 					</Swiper>
-
 				</CardContent>
 
 				<CardActions disableSpacing>
@@ -82,7 +74,6 @@ export const FilePage: FC<PageProps> = ({ page }) => {
 
 				<CardMedia>
 					<InfoPanel open={infoPanelOpened} />
-
 					<Loading open={page.selected} />
 				</CardMedia>
 			</Card>

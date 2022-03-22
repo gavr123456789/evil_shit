@@ -1,4 +1,4 @@
-import { createStore, createEvent } from 'effector';
+import { createStore, createEvent, combine } from 'effector';
 import { DirOrFileRow } from 'renderer/model/types';
 
 export interface DirOrFileWithPath {
@@ -6,25 +6,26 @@ export interface DirOrFileWithPath {
 	item: DirOrFileRow;
 }
 
-export const $selected = createStore<Set<DirOrFileWithPath>>(new Set<DirOrFileWithPath>(), { name: 'counderStore' });
+export const $selected = createStore<DirOrFileWithPath[]>([], { name: 'selected' });
 
 export const selectFile = createEvent<DirOrFileWithPath>('selectFile');
-export const unselectFile = createEvent<DirOrFileWithPath>('selectFile');
-export const clearSelection = createEvent('selectFile');
+export const unselectFile = createEvent<DirOrFileWithPath>('unselectFile');
+export const clearSelection = createEvent('clearSelection');
 
 $selected
-	.on(selectFile, (state, value) => {
-    state.add(value);
-    console.log("select done, store: ", state);
-	})
-	.on(unselectFile, (state, value) => {
-		state.delete(value);
-    console.log("unselect done store: ", state);
+	.on(selectFile, (state, value) => [ ...state, value ])
+	.on(unselectFile, (state, value) => state.filter((x) => x.fullPath !== value.fullPath))
+	.on(clearSelection, (_state) => [])
+	.watch((x) => console.log(x));
 
-	})
-	.on(clearSelection, (state) => {
-		state.clear();
-	});
 
-export const $selectedCount = $selected.map(s => s.size)
-export const $selectedIsNotEmpty = $selected.map(s => s.size > 0)
+export const manualOpenCloseGlobalMenu = createEvent<boolean>('manualOpenCloseGlobalMenu');
+
+export const $globalMenuOpenManual = createStore<boolean>(false).on(manualOpenCloseGlobalMenu, (_state, value) => {
+	return value;
+});
+export const $selectedIsNotEmpty = $selected.map((s) => s.length > 0);
+
+export const $globalMenuOpen = combine($globalMenuOpenManual, $selectedIsNotEmpty, (a, b) => {
+	return a || b;
+});
